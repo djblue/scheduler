@@ -1,0 +1,399 @@
+[
+    {
+        "_id": "0",
+        "subject_id": "0",
+        "number": "212",
+        "title" : "Engineering Mechanics"
+    },
+    {
+        "_id": "1",
+        "subject_id": "0",
+        "number": "213",
+        "title" : "Solid Mechanics"
+    },
+    {
+        "_id": "2",
+        "subject_id": "0",
+        "number": "214",
+        "title" : "Computer-Aided Engineering I"
+    },
+    {
+        "_id": "3",
+        "subject_id": "0",
+        "number": "215",
+        "title" : "Intro to Programming in MATLAB"
+    },
+    {
+        "_id": "4",
+        "subject_id": "0",
+        "number": "240",
+        "title" : "Thermofluids I"
+    },
+    {
+        "_id": "5",
+        "subject_id": "0",
+        "number": "318",
+        "title" : "System Dynamics and Control"
+    },
+    {
+        "_id": "6",
+        "subject_id": "0",
+        "number": "322",
+        "title" : "Structural Mechanics"
+    },
+    {
+        "_id": "7",
+        "subject_id": "0",
+        "number": "342",
+        "title" : "Principles of Mechanical Design"
+    },
+    {
+        "_id": "8",
+        "subject_id": "0",
+        "number": "360",
+        "title" : "Aerodynamics"
+    },
+    {
+        "_id": "9",
+        "subject_id": "0",
+        "number": "384",
+        "title" : "Adv Mathematical Methods"
+    },
+    {
+        "_id": "10",
+        "subject_id": "1",
+        "number": "120",
+        "title" : "Digital Design Fundementals"
+    },
+    {
+        "_id": "11",
+        "subject_id": "1",
+        "number": "202",
+        "title" : "Circuits I"
+    },
+    {
+        "_id": "12",
+        "subject_id": "1",
+        "number": "203",
+        "title" : "Signals and Systems I"
+    },
+    {
+        "_id": "13",
+        "subject_id": "1",
+        "number": "241",
+        "title" : "Fundamentals Electromagnetics"
+    },
+    {
+        "_id": "14",
+        "subject_id": "1",
+        "number": "304",
+        "title" : "Signals and Systems II"
+    },
+    {
+        "_id": "15",
+        "subject_id": "1",
+        "number": "334",
+        "title" : "Circuits II"
+    },
+    {
+        "_id": "16",
+        "subject_id": "1",
+        "number": "335",
+        "title" : "Analog and Digital Circuits"
+    },
+    {
+        "_id": "17",
+        "subject_id": "1",
+        "number": "350",
+        "title" : "Random Signal Analysis"
+    },
+    {
+        "_id": "18",
+        "subject_id": "1",
+        "number": "360",
+        "title" : "Energy Systems/Power Electronics"
+    },
+    {
+        "_id": "19",
+        "subject_id": "2",
+        "number": "111",
+        "title" : "Engineering Perspectives/Biologic Systems"
+    },
+    {
+        "_id": "20",
+        "subject_id": "2",
+        "number": "200",
+        "title" : "Conservation Principles"
+    },
+    {
+        "_id": "21",
+        "subject_id": "2",
+        "number": "211",
+        "title" : "MATLAB & Mathcad in BME"
+    },
+    {
+        "_id": "22",
+        "subject_id": "2",
+        "number": "235",
+        "title" : "Physiology for Engineers"
+    },
+    {
+        "_id": "23",
+        "subject_id": "2",
+        "number": "301",
+        "title" : "Numerical Methods in BME"
+    },
+    {
+        "_id": "24",
+        "subject_id": "2",
+        "number": "331",
+        "title" : "Bioengineering Transport Phenomena"
+    },
+    {
+        "_id": "25",
+        "subject_id": "2",
+        "number": "351",
+        "title" : "Circuits for BME"
+    },
+    {
+        "_id": "26",
+        "subject_id": "2",
+        "number": "352",
+        "title" : "Filtering for Signals"
+    },
+    {
+        "_id": "27",
+        "subject_id": "3",
+        "number": "201",
+        "title" : "Human Anatomy & Physiology I"
+    },
+    {
+        "_id": "28",
+        "subject_id": "3",
+        "number": "202",
+        "title" : "Human Anatomy & Physiology II"
+    },
+    {
+        "_id": "29",
+        "subject_id": "4",
+        "number": "210",
+        "title" : "Engineering Mechanics I: Statics"
+    },
+    {
+        "_id": "30",
+        "subject_id": "4",
+        "number": "212",
+        "title" : "Engineering Mechanics  II: Dynamics"
+    },
+    {
+        "_id": "31",
+        "subject_id": "4",
+        "number": "213",
+        "title" : "Intro to Deformable Solids"
+    },
+    {
+        "_id": "32",
+        "subject_id": "4",
+        "number": "281",
+        "title" : "Surveying"
+    },
+    {
+        "_id": "33",
+        "subject_id": "4",
+        "number": "341",
+        "title" : "Fluid Mechanics for Civil Engineers"
+    },
+    {
+        "_id": "34",
+        "subject_id": "4",
+        "number": "384",
+        "title" : "Numerical Methods for Engineers"
+    },  
+    {
+        "_id": "35",
+        "subject_id": "5",
+        "number": "170/171",
+        "title" : "Precalculus"
+    },
+    {
+        "_id": "36",
+        "subject_id": "5",
+        "number": "265/270",
+        "title" : "Calculus I"
+    },
+    {
+        "_id": "37",
+        "subject_id": "5",
+        "number": "266/271",
+        "title" : "Calculus II"
+    },
+    {
+        "_id": "38",
+        "subject_id": "5",
+        "number": "267/272",
+        "title" : "Calculus III"
+    },
+    {
+        "_id": "39",
+        "subject_id": "5",
+        "number": "275",
+        "title" : "Modern Differential Equations"
+    },
+    {
+        "_id": "40",
+        "subject_id": "5",
+        "number": "343",
+        "title" : "Linear Algebra"
+    },
+    {
+        "_id": "41",
+        "subject_id": "6",
+        "number": "111",
+        "title" : "General Physics"
+    },
+    {
+        "_id": "42",
+        "subject_id": "6",
+        "number": "121/122",
+        "title" : "Physics I: Mechanics"
+    },
+    {
+        "_id": "43",
+        "subject_id": "6",
+        "number": "131/132",
+        "title" : "Physics II: Electricity and Magnetism"
+    },
+    {
+        "_id": "44",
+        "subject_id": "6",
+        "number": "252",
+        "title" : "Physics III"
+    },
+    {
+        "_id": "45",
+        "subject_id": "7",
+        "number": "113",
+        "title" : "General Chemistry I"
+    },
+    {
+        "_id": "46",
+        "subject_id": "7",
+        "number": "114",
+        "title" : "General Chemistry for Engineers"
+    },
+    {
+        "_id": "47",
+        "subject_id": "7",
+        "number": "116",
+        "title" : "General Chemistry II"
+    },
+    {
+        "_id": "48",
+        "subject_id": "7",
+        "number": "231",
+        "title" : "Elementary Organic Chemistry"
+    },
+    {
+        "_id": "49",
+        "subject_id": "7",
+        "number": "233",
+        "title" : "General Organic Chemistry I"
+    },
+    {
+        "_id": "50",
+        "subject_id": "7",
+        "number": "234",
+        "title" : "General Organic Chemistry II"
+    },
+    {
+        "_id": "51",
+        "subject_id": "8",
+        "number": "211",
+        "title" : "Intro to Chemical Processing"
+    },
+    {
+        "_id": "52",
+        "subject_id": "8",
+        "number": "231",
+        "title" : "Intro Transport Phenom I: Fluids"
+    },
+    {
+        "_id": "53",
+        "subject_id": "8",
+        "number": "334",
+        "title" : "Intro TP II: Heat/Mass Transfer"
+    },
+    {
+        "_id": "54",
+        "subject_id": "8",
+        "number": "342",
+        "title" : "Applied Chemical Thermodynamics"
+    },
+    {
+        "_id": "55",
+        "subject_id": "9",
+        "number": "210",
+        "title" : "Intro to Industrial Engineering"
+    },
+    {
+        "_id": "56",
+        "subject_id": "9",
+        "number": "220",
+        "title" : "Business/Industrial Engineering"
+    },
+    {
+        "_id": "57",
+        "subject_id": "9",
+        "number": "300",
+        "title" : "Economic Analysis for Engineers"
+    },
+    {
+        "_id": "58",
+        "subject_id": "9",
+        "number": "305",
+        "title" : "Information Systems Engineering"
+    },
+    {
+        "_id": "59",
+        "subject_id": "9",
+        "number": "380",
+        "title" : "Probability & Statistics Engr Problem Solving"
+    },
+    {
+        "_id": "60",
+        "subject_id": "10",
+        "number": "211",
+        "title" : "Intro to Mechanics - Materials"
+    },
+    {
+        "_id": "61",
+        "subject_id": "10",
+        "number": "215",
+        "title" : "Materials Synthesis"
+    },
+    {
+        "_id": "62",
+        "subject_id": "10",
+        "number": "250",
+        "title" : "Structure & Properties - Materials"
+    },
+    {
+        "_id": "63",
+        "subject_id": "10",
+        "number": "330",
+        "title" : "Thermodynamics of Materials"
+    },
+    {
+        "_id": "64",
+        "subject_id": "10",
+        "number": "335",
+        "title" : "Materials Kinetics/Processing"
+    },
+    {
+        "_id": "65",
+        "subject_id": "10",
+        "number": "355",
+        "title" : "Materials Structure/Microstructure"
+    }
+
+]

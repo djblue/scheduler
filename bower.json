@@ -1,0 +1,22 @@
+{
+  "name": " scheduler",
+  "version": "0.0.0",
+  "homepage": "https://github.com/mebi90/scheduler",
+  "authors": [
+    "Chris Badahdah <a.s.badahdah@gmail.com>",
+    "Ismael Mercado <mebi90@hotmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pure": "~0.3.0",
+    "angular": "~1.2.5"
+  }
+}

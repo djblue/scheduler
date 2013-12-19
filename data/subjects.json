@@ -1,0 +1,57 @@
+[
+    { 
+        "_id": "0",
+        "title": "Mechanical/Aerospace Engineering",
+        "prefix": "MAE"
+    },
+    {
+        "_id": "1",
+        "title": " Electrical Engineering",
+        "prefix": "EEE"
+    },
+    {
+        "_id": "2",
+        "title": "Biomedical Engineering",
+        "prefix": "BME"
+    },
+    {
+        "_id": "3",
+        "title": " Biology",
+        "prefix": "BIO"
+    },
+    {
+        "_id": "4",
+        "title": " Civil Engineering",
+        "prefix": "CEE"
+    },
+    {
+        "_id": "5",
+        "title": "Math",
+        "prefix": "MAT"
+    },
+    {
+        "_id": "6",
+        "title": "Physics",
+        "prefix": "PHY"
+    },
+    {
+        "_id": "7",
+        "title": "Chemical Engineering",
+        "prefix": "CHM"
+    },
+     {
+        "_id": "8",
+        "title": "Chemistry",
+        "prefix": "CHE"
+    },
+    {
+        "_id": "9",
+        "title": "Industrial Engineering",
+        "prefix": "IEE"
+    },
+    {
+        "_id": "10",
+        "title": "Materials Science and Engineering",
+        "prefix": "MSE"
+    }
+]
