@@ -29,6 +29,7 @@ describe('/api/staff', function () {
             .set('Accept', 'application/json')
             .send(staff)
             .end(function (err, res) {
+                expect(res.status).toBe(201);
                 expect(res.body._id).not.toBe(undefined);
                 expect(res.body.name).toBe(staff.name);
                 expect(res.body.email).toBe(staff.email);
