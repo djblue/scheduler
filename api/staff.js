@@ -12,7 +12,7 @@ var Staff = exports.Staff = mongoose.model('Staff', {
     name: { type: String, required: true },
     email: { type: mongoose.SchemaTypes.Email, required: true },
     major: { type: String, ref: 'Subject', required: true },
-    courses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
+    courses: [{ type: String, ref: 'Course' }],
     availability: {
         monday: [],
         tuesday: [],
@@ -27,7 +27,7 @@ var Staff = exports.Staff = mongoose.model('Staff', {
         thursday: [],
         friday: []
     },
-    max: Number,
+    max: String,
     phone: String
 });
 
@@ -80,7 +80,16 @@ var remove = function (req, res) {
     }); 
 };
 
-var update = function (req, res) { };
+var update = function (req, res) { 
+    Staff.findByIdAndUpdate(req.params.id, req.body)
+        .exec(function (err, staff) {
+            if (err) {
+                res.json(500, err);
+            } else {
+                res.json(200, staff);
+            }
+        });
+};
 
 var getHours = function (req, res) {
 
@@ -105,21 +114,15 @@ var getHours = function (req, res) {
 };
 
 var submitHours = function (req, res) {
-
-    Staff.findByIdAndUpdate(req.params.id, 
-        {
-            availability: req.body.availability,
-            courses: req.body.courses, 
-            phone: req.body.phoneNumber,
-            max: Number(req.body.maxHours)
-        }, 
-        function (err, Staff) {
-        if (err) {
-            res.json(500,err);
-        } else {
-            res.end(200);
-        }
-    });
+    console.log(_.pick( req.body, 'availability', 'courses', 'phone', 'max'));
+    Staff.findByIdAndUpdate(req.params.id, req.body)
+        .exec(function (err, staff) {
+            if (err) {
+                res.json(500, err);
+            } else {
+                res.json(200, staff);
+            }
+        });
 };
 
 exports.setup = function (app) {

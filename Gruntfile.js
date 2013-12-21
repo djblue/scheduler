@@ -165,5 +165,5 @@ module.exports = function(grunt) {
     // register all of the grunt tasks
     grunt.registerTask('default', ['shell:mongo','express:prod']);
     grunt.registerTask('server', ['shell:mongo', 'express:dev','watch:reload', 'watch:express']);
-    grunt.registerTask('test', ['watch:jasmine']);
+    grunt.registerTask('test', ['shell:mongo', 'watch:jasmine']);
 };
