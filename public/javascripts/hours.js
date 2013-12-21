@@ -66,6 +66,10 @@ app.controller('hoursController', function ($scope, $http) {
         $scope.maxHours = $scope.staff.max;
     }
 
+    if (!!$scope.staff.courses) {
+        $scope.selectedCourses = $scope.staff.courses;
+    }
+
     if (!!$scope.staff.phone) {
         $scope.phoneNumber = $scope.staff.phone;
     }

@@ -120,16 +120,14 @@
         <h1>{{ staff.name }}</h1>
         <h2>{{ staff.email }}</h2>
         <h2>{{ staff.major.title }}</h2>
-        <input ng-model="maxHours" type="number" placeholder="Maximum Hours">
+        <input ng-model="maxHours" type="text" placeholder="Maximum Hours">
         <input ng-model="phoneNumber" type="text" placeholder="Phone Number">
-        <h1>Select Courses You can Tutor (List All)</h1>
+        <h1>Select Courses</h1>
         <select multiple ng-model="selectedCourses">
             <optgroup label="{{subject}}" 
                 ng-repeat="(subject, courses) in catalog">
                 <option value="{{course._id}}" ng-repeat="course in courses">
-                    <span class="prefix">
-                        {{course.subject.prefix}} {{course.number}}:</span>
-                    {{course.title}}
+                    {{course.subject.prefix}} {{course.number}}: {{course.title}}
                 </option>
             </optgorup>
         </select>
