@@ -26,4 +26,4 @@ database=test
 collection=`echo $1 | sed s/.json//`
 
 # Importing into database
-cat $file | tr -d ' ' | mongoimport --jsonArray --db $database --collection $collection -
+cat $file | mongoimport --jsonArray --db $database --collection $collection -
