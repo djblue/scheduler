@@ -1,0 +1,9 @@
+<div class="check-list">
+    <span ng-transclude></span>
+    <ol>
+        <li ng-repeat="l in list track by $index">
+            <span class="check-{{!!list[$index]}}" ng-click="check($index)"
+            type="checkbox">✓</span>
+        </li>
+    </ol>
+</div>

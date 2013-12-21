@@ -1,0 +1,139 @@
+<!doctype html>
+<html ng-app="app" lang="en">
+<head>
+    <title>Submit Hours</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="">
+    <script src="/bower_components/underscore/underscore-min.js"/></script>
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script src="javascripts/hours.js"></script>
+    <script src="//djblue.us.to:35729/livereload.js"></script>
+    <link rel="stylesheet" type="text/css" href="/bower_components/pure/base-min.css">
+    <link rel="stylesheet" type="text/css" href="/bower_components/pure/pure-min.css">
+    <style>
+     
+        li {
+            list-style: none;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: bold;
+            color: rgb(75, 75, 75);
+        }
+        .clear { clear: both; }
+        .pure-g-r {
+            max-width: 860px;
+            margin: 0 auto;
+            box-shadow: 0px 0px 0px #eee;
+        }
+        input, select {
+            padding: .5em .6em;
+            margin: 10px 0px;
+            display: block;
+            border: 1px solid #ccc;
+            font-size: .8em;
+            box-shadow: inset 0 1px 3px #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+        .check-list {
+            float: left;
+            text-align: center;
+            margin-left: 10px;
+        }
+        .check-list:first-child {
+            font-weight: bold;
+            color: rgb(103, 194, 240);
+        }
+        *:focus {
+            outline: 0;
+        }
+        span[class*=check] {
+            display: block;
+            cursor: pointer;
+            padding: 5px 25px;
+            background: #eee;
+            margin: 1px;
+            border-radius: 5px;
+        }
+        .time {
+            padding: 5.5px 0px;
+            margin: 1px;
+        }
+        .time:first-child {
+            padding: 0px;
+        }
+        .prefix {
+            font-weight: bold;
+            color: rgb(103, 194, 240);
+            background: pink;
+        }
+        .check-true {
+            color: rgb(103, 194, 240);
+            background: #0e90d2!important;
+        }
+        .check-false {
+            color: black;
+            opacity: 0.50;
+        }
+        .check-false:hover {
+            opacity: 0.75;
+        }
+        select {
+            display: block;
+            width: 100%;
+            height: 324px;;
+        }
+        ol {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+</head>
+<body ng-controller="hoursController">
+
+<div class="pure-g-r">
+
+    <div class="pure-u-3-5">
+        <h1>Please Select Availability</h1>
+        <div class="check-list">
+            <ol>
+                <li class="time" ng-repeat="time in times" >{{ time }} </li>
+            </ol>
+        </div>
+        <div list="days.monday" check-list>M</div>
+        <div list="days.tuesday" check-list>Tu</div>
+        <div list="days.wednesday" check-list>W</div>
+        <div list="days.thursday" check-list>Th</div>
+        <div list="days.friday" check-list>F</div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="pure-u-2-5">
+        <h1>Abdullah Badahdah</h1>
+        <h2>abadahda@asu.edu</h2>
+        <h2>Computer Science</h2>
+        <input ng-model="maxHours" type="number" placeholder="Maximum Hours">
+        <input ng-model="phoneNumber" type="text" placeholder="Phone Number">
+        <h1>Select Courses You can Tutor (List All)</h1>
+        <select multiple ng-model="selectedCourses">
+            <optgroup label="{{subject}}" 
+                ng-repeat="(subject, courses) in catalog">
+                <option value="{{course._id}}" ng-repeat="course in courses">
+                    <span class="prefix">
+                        {{course.subject.prefix}} {{course.number}}:</span>
+                    {{course.title}}
+                </option>
+            </optgorup>
+        </select>
+    </div>
+    <div class="pure-u-1">
+        <button style="float: right;"
+            class="pure-button pure-button-primary" ng-click="submit()">Submit</button>
+    </div>
+</div>
+
+</body>
+</html>

@@ -9,6 +9,7 @@ var util        = require('util')
   , passport    = require('passport')
   , auth        = require('./api/auth')
   , users       = require('./api/users')
+  , courses     = require('./api/courses')
   , staff       = require('./api/staff');
 
 // all environments
@@ -41,6 +42,14 @@ if (!!process.env.MONGOLAB_URI) {
 auth.setup(app);
 users.setup(app);
 staff.setup(app);
+courses.setup(app);
+
+app.get('/', function (req, res) {
+    res.render('hours');
+});
+app.post('/', function (req,res) {
+    res.json(req.body);
+});
 
 //mongooseApi.serveModels(app);
 var db = mongoose.connection; 
