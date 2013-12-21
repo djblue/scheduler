@@ -8,11 +8,27 @@ mongooseTypes.loadTypes(mongoose);
 
 // Setup the use model.
 var Staff = exports.Staff = mongoose.model('Staff', {
-    name: { type:String, required: true },
+    editable: { type: Boolean, default: true },
+    name: { type: String, required: true },
     email: { type: mongoose.SchemaTypes.Email, required: true },
-    classes: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
-    availavility: [String],
-    schedule: [String]
+    major: { type: String, ref: 'Subject', required: true },
+    courses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
+    availability: {
+        monday: [],
+        tuesday: [],
+        wednesday: [],
+        thursday: [],
+        friday: []
+    },
+    schedule: {
+        monday: [],
+        tuesday: [],
+        wednesday: [],
+        thursday: [],
+        friday: []
+    },
+    max: Number,
+    phone: String
 });
 
 var list = function (req, res) {
@@ -39,7 +55,8 @@ var add = function (req, res) {
     } else {
         Staff.create({
             name: req.body.name,
-            email: req.body.email
+            email: req.body.email,
+            major: req.body.major
         }, function (err, staff) {
             if (err) {
                 res.json(500, {
@@ -63,10 +80,54 @@ var remove = function (req, res) {
     }); 
 };
 
+var update = function (req, res) { };
+
+var getHours = function (req, res) {
+
+    Staff.findById(req.params.id)
+        .populate('major')
+        .exec(function (err, staff) {
+            if (staff.editable) {
+                if (err) {
+                    res.json(500,err);
+                } else {
+                    res.render('hours', {
+                        staff: JSON.stringify(staff)
+                    });
+                }
+            } else {
+                res.render('error', {
+                    message: 'Sorry. You are unable to edit your hours at the current time'
+                });
+            }
+    });
+
+};
+
+var submitHours = function (req, res) {
+
+    Staff.findByIdAndUpdate(req.params.id, 
+        {
+            availability: req.body.availability,
+            courses: req.body.courses, 
+            phone: req.body.phoneNumber,
+            max: Number(req.body.maxHours)
+        }, 
+        function (err, Staff) {
+        if (err) {
+            res.json(500,err);
+        } else {
+            res.end(200);
+        }
+    });
+};
+
 exports.setup = function (app) {
     app.get('/api/staff', list);
     app.post('/api/staff', add);
+    app.put('/api/staff/:id', update);
     app.delete('/api/staff/:id', remove);
+
+    app.get('/staff/:id', getHours);
+    app.post('/staff/:id', submitHours);
 };
-
-

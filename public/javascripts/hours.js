@@ -31,7 +31,7 @@ app.directive('checkList', function () {
         scope: {
             list: '='
         },
-        templateUrl: 'partials/checkList.html',
+        templateUrl: '/partials/checkList.html',
         controller: checkController
     }
 
@@ -46,13 +46,29 @@ app.controller('hoursController', function ($scope, $http) {
             });
         });
 
-    $scope.days = {
-        monday: Array(20),
-        tuesday: Array(20),
-        wednesday: Array(20),
-        thursday: Array(20),
-        friday: Array(20)
-    };
+    // try to apply previous data
+    $scope.staff = window.staff;
+
+    // staff member with no availability listed
+    if ($scope.staff.availability.monday.length === 0) {
+        $scope.days = {
+            monday: Array(20),
+            tuesday: Array(20),
+            wednesday: Array(20),
+            thursday: Array(20),
+            friday: Array(20)
+        };
+    } else {
+        $scope.days = $scope.staff.availability;
+    }
+
+    if (!!$scope.staff.max) {
+        $scope.maxHours = $scope.staff.max;
+    }
+
+    if (!!$scope.staff.phone) {
+        $scope.phoneNumber = $scope.staff.phone;
+    }
 
     $scope.times = ['Time'];
 
@@ -85,7 +101,7 @@ app.controller('hoursController', function ($scope, $http) {
     }
 
     $scope.submit = function () {
-        $http.post('.', {
+        $http.post(document.URL, {
             availability: $scope.days,
             courses: $scope.selectedCourses,
             phone: $scope.phoneNumber,

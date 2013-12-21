@@ -82,23 +82,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        requirejs: {
-            options: {
-                almond: true,
-                include: "components/almond/almond",
-                optimize: "uglify2",
-                generateSourceMaps: false,
-                baseUrl: "./public/javascripts/",
-                preserveLicenseComments: false
-            },
-            request: {
-                options: {
-                    name: "request",
-                    mainConfigFile: "public/javascripts/request.js",
-                    out: "build/public/javascripts/request.js",
-                }
-            }
-        },
         open: {
             index:   { path: 'http://127.0.0.1:3000' },
         },
@@ -107,18 +90,6 @@ module.exports = function(grunt) {
                 port: 8000,
                 options: {
                     base: [".", "public"]
-                }
-            }
-        },
-        jasmine: {
-            browser: {
-                options: {
-                    specs: './public/javascripts/specs/example.js',
-                    host: 'http://127.0.0.1:8000/',
-                    template: require('grunt-template-jasmine-requirejs'),
-                    templateOptions: {
-                        requireConfigFile: 'public/javascripts/config.js'
-                    }
                 }
             }
         },
@@ -162,6 +133,11 @@ module.exports = function(grunt) {
                 stderr: true,
                 failOnError: true
             }
+        },
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            }
         }
     });
 
@@ -179,14 +155,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
-    // Grunt task for minimizing js 
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
     // Grunt task to open things like a web browser
     grunt.loadNpmTasks('grunt-open');
 
-    grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-jasmine-node');
+    grunt.loadNpmTasks('grunt-karma');
 
     // register all of the grunt tasks
     grunt.registerTask('default', ['shell:mongo','express:prod']);

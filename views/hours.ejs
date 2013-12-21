@@ -8,7 +8,12 @@
     <link rel="stylesheet" type="text/css" href="">
     <script src="/bower_components/underscore/underscore-min.js"/></script>
     <script src="/bower_components/angular/angular.min.js"></script>
-    <script src="javascripts/hours.js"></script>
+    <script>
+        /* grab user info */
+        window.staff = <%- staff %>;
+        console.log(window.staff);
+    </script>
+    <script src="/javascripts/hours.js"></script>
     <script src="//djblue.us.to:35729/livereload.js"></script>
     <link rel="stylesheet" type="text/css" href="/bower_components/pure/base-min.css">
     <link rel="stylesheet" type="text/css" href="/bower_components/pure/pure-min.css">
@@ -112,9 +117,9 @@
     </div>
 
     <div class="pure-u-2-5">
-        <h1>Abdullah Badahdah</h1>
-        <h2>abadahda@asu.edu</h2>
-        <h2>Computer Science</h2>
+        <h1>{{ staff.name }}</h1>
+        <h2>{{ staff.email }}</h2>
+        <h2>{{ staff.major.title }}</h2>
         <input ng-model="maxHours" type="number" placeholder="Maximum Hours">
         <input ng-model="phoneNumber" type="text" placeholder="Phone Number">
         <h1>Select Courses You can Tutor (List All)</h1>
