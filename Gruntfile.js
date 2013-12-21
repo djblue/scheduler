@@ -53,7 +53,8 @@ module.exports = function(grunt) {
                     'public/stylesheets/*.css',
                     'public/javascripts/**/*.js',
                     'public/javascripts/**/*.ejs',
-                    'public/**/*.html'
+                    'public/**/*.html',
+                    'views/*'
                 ],   
                 options: {
                      livereload: true
