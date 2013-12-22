@@ -1,32 +1,42 @@
 module.exports = function(config) {
   config.set({
+
     basePath: '',
 
     frameworks: ['jasmine'],
 
     // list of files / patterns to load in the browser
     files: [
-      // libraries
-      'lib/jquery-1.8.1.min.js',
-      'lib/angular.js',
-      'lib/angular-mocks.js',
 
-      // our app
-      'js/*.js',
+        // libraries
+        'public/bower_components/jquery/jquery.min.js',
+        'public/bower_components/underscore/underscore-min.js',
+        'public/bower_components/angular/angular.min.js',
+        'public/bower_components/angular-route/angular-route.min.js',
+        'public/bower_components/angular-mocks/angular-mocks.js',
 
-      // tests
-      'test/*.js',
+        // our app
+        'public/javascripts/*.js',
 
-      // templates
-      'tpl/*.html'
+        // tests
+        'public/javascripts/specs/*.js',
+
+        // templates
+        'public/partials/*.html'
+
     ],
 
-    // generate js files from html templates
     preprocessors: {
-      'tpl/*.html': 'ng-html2js'
+        'public/partials/*.html': 'ng-html2js'
+    },
+
+    ngHtml2JsPreprocessor: {
+        stripPrefix: 'public'
     },
 
     autoWatch: true,
-    browsers: ['Chrome']
+    browsers: ['PhantomJS'],
+    reporters: ['dots']
+
   });
 };
