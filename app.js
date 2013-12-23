@@ -44,13 +44,6 @@ users.setup(app);
 staff.setup(app);
 courses.setup(app);
 
-app.get('/', function (req, res) {
-    res.render('hours');
-});
-app.post('/', function (req,res) {
-    res.json(req.body);
-});
-
 //mongooseApi.serveModels(app);
 var db = mongoose.connection; 
 

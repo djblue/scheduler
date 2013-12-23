@@ -9,6 +9,10 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     color: rgb(75, 75, 75);
 }
+.staff-column {
+    width: 80px;
+    float: left;
+}
 .clear { clear: both; }
 .center { margin: 0 auto; }
 .pure-g-r {
@@ -26,10 +30,15 @@ input, select {
     border-radius: 4px;
     width: 100%;
 }
-.check-list {
+.partial-sum {
     float: left;
+    display: block;
+    padding:0 10px;
+}
+.check-list 
+{
     text-align: center;
-    margin-left: 10px;
+    padding:0 10px;
 }
 .check-list:first-child {
     font-weight: bold;
@@ -41,14 +50,12 @@ input, select {
 span[class*=check] {
     display: block;
     cursor: pointer;
-    padding: 5px 25px;
     background: #eee;
-    margin: 1px;
-    border-radius: 5px;
+  //  margin: 1px;
 }
 .time {
-    padding: 5px 0px;
-    margin: 1px;
+//    padding: 5px 0px;
+ //   margin: 1px;
 }
 .time:first-child {
     padding: 0px;
@@ -68,6 +75,10 @@ span[class*=check] {
 }
 .check-false:hover {
     opacity: 0.75;
+}
+.check-disabled {
+    color: rgb(103, 194, 240);
+    background: pink!important;
 }
 select {
     display: block;
