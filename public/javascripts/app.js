@@ -33,29 +33,32 @@ app.directive('checkList', function () {
         }
 
         // initialize partial sums
-        if (!!$scope.sums) {
-            for (var i = 0; i < $scope.sums.length; i++) {
-                $scope.sums[i] = 0;
-                $scope.total[i] = 0;
+        if (!!$scope.inc1) {
+            for (var i = 0; i < $scope.inc1.length; i++) {
+                $scope.inc1[i] = 0;
             }
         }
+        if (!!$scope.inc1) {
+            for (var i = 0; i < $scope.inc2.length; i++) {
+                $scope.inc2[i] = 0;
+            }
+        }
+        if (!$scope.acc) { $scope.acc = 0; }
 
         $scope.check = function (i) {
             if ($scope.status[i] !== 'disabled') {
                 if ($scope.list[i] === 0) {
                     $scope.list[i] = 1;
                     $scope.status[i] = 'true';
-                    if (!!$scope.sums) {
-                        $scope.sums[i]++;
-                        $scope.total[i]++;
-                    }
+                    if (!!$scope.inc1)    { $scope.inc1[i]++; }
+                    if (!!$scope.inc2)    { $scope.inc2[i]++; }
+                    if (!!($scope.acc+1)) { $scope.acc++;     }
                 } else {
                     $scope.list[i] = 0;
                     $scope.status[i] = 'false';
-                    if (!!$scope.sums) {
-                        $scope.sums[i]--;
-                        $scope.total[i]--;
-                    }
+                    if (!!$scope.inc1)    { $scope.inc1[i]--; }
+                    if (!!$scope.inc2)    { $scope.inc2[i]--; }
+                    if (!!($scope.acc+1)) { $scope.acc--;     }
                 }
             }
         }
@@ -68,8 +71,11 @@ app.directive('checkList', function () {
         scope: {
             list: '=',
             mask: '=',
-            sums: '=',
-            total: '='
+            acc: '=',
+            inc1: '=',
+            inc2: '=' 
+        },
+        link: function (scope, element, attrs) {
         },
         templateUrl: '/partials/checkList.html',
         controller: checkController

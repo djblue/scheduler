@@ -1,0 +1,51 @@
+body {
+    padding-left: 150px;
+}
+
+#menu {
+    text-align: left;
+    margin-left: -150px;
+    width: 150px;
+    position: fixed;
+    top: 0;
+    left: 150px;
+    bottom: 0;
+    z-index: 100;
+    background: #191818;
+    overflow-y: auto;
+}
+
+#menu li {
+    font-weight: 100;
+}
+
+#menu li:first-child {
+    border-bottom: 1px solid #777;
+}
+
+#menu li:first-child a {
+    color: #fff;
+}
+
+#menu li:first-child  {
+    background: none;
+}
+
+#menu li:first-child a:hover {
+    color: #999;
+    background: none;
+}
+
+#menu a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: #999;
+    padding: 15px;
+    border: none;
+}
+
+#menu a:hover {
+    background: #555;
+}

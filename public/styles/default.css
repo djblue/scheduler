@@ -5,13 +5,19 @@
 li {
     list-style: none;
 }
+h1 {
+    font-size: 20px;
+}
+h2 {
+    font-size: 16px;
+}
+h3 {
+    font-size: 14px;
+}
 h1, h2, h3, h4, h5, h6 {
+    font-family: courier;
     font-weight: bold;
     color: rgb(75, 75, 75);
-}
-.staff-column {
-    width: 80px;
-    float: left;
 }
 .clear { clear: both; }
 .center { margin: 0 auto; }
@@ -30,16 +36,6 @@ input, select {
     border-radius: 4px;
     width: 100%;
 }
-.partial-sum {
-    float: left;
-    display: block;
-    padding:0 10px;
-}
-.check-list 
-{
-    text-align: center;
-    padding:0 10px;
-}
 .check-list:first-child {
     font-weight: bold;
     color: rgb(103, 194, 240);
@@ -51,14 +47,6 @@ span[class*=check] {
     display: block;
     cursor: pointer;
     background: #eee;
-  //  margin: 1px;
-}
-.time {
-//    padding: 5px 0px;
- //   margin: 1px;
-}
-.time:first-child {
-    padding: 0px;
 }
 .prefix {
     font-weight: bold;
@@ -77,8 +65,8 @@ span[class*=check] {
     opacity: 0.75;
 }
 .check-disabled {
-    color: rgb(103, 194, 240);
-    background: pink!important;
+    color: rgb(236, 164, 154);
+    background: #dd514c!important;
 }
 select {
     display: block;

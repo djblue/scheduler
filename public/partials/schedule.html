@@ -4,47 +4,89 @@
         be careful when making changes. You might be 'accidently'
         do something you don't intend to do.
      */
+     body {
+        text-align: center;
+        color: #777;
+     }
+    .scheduler {
+        display: inline-block;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+    }
+    div[class*=column] {
+        display: inline-block;
+        margin: 0px 5px;
+    }
+    .check-list 
+    {
+        text-align: center;
+        padding:0 10px;
+    }
     .major-column {
-        margin-left: 20px;
     }
-    .major-column,
-    .partial-column {
-        float:left;
+    .staff-column {
+        width: 76px;
     }
-    .day-column {
-        border: 1px orange solid;
+    .major-column {
     }
-    .name {
-        display: block;
+    .partial-sum-column {
+        //color: #191818;
+    }
+    .sum-column {
+        color: #0e90d2;
+        font-weight: bold;
+    }
+    div[class*=row] {
+    }
+    .majors-row {
         height: 48px;
         text-align: center;
     }
-    .max {
+    .names-row {
+        display: block;
+        height: 48px;
+        text-align: center;
+        vertical-align: text-top;
+    }
+    .max-hours-row {
         display: block;
         height: 24px;
         text-align: center;
     }
-    .day {
-        margin-top: 80px;
+    .current-hours-row {
+        text-align: center;
+        height: 20px;
+    }
+    .current-hours-row h3 {
+        margin: 0 20px;
+        color: rgb(255, 255, 255);
+        background: #0e90d2;
+        border-radius: 5px;
+    }
+    .body-row {
+        margin-top: 40px;
     }
 
 </style>
 
 <div ng-controller="schedulerController" class="scheduler">
 
-    <div style="float: left;" >
-        <h1 style="text-align: center;">T</h1>
-        <span class="name"></span>
-        <span class="max"></span>
-        <div count="days" time-list>
-        </div>
+    <div class="time-column" >
+        <!-- Header content -->
+        <div class="majors-row"></div>
+        <div class="names-row"></div>
+        <div class="max-hours-row"></div>
+        <div class="current-hours-row"></div>
+        <div class="body-row" count="days" time-list></div>
     </div>
 
-    <div class="partial-sum">
-        <h1 style="text-align: center;">V</h1>
-        <span class="name"></span>
-        <span class="max"></span>
-        <div class="day" ng-repeat="day in days">
+    <div class="sum-column">
+        <!-- Header content -->
+        <div class="majors-row"></div>
+        <div class="names-row"></div>
+        <div class="max-hours-row"></div>
+        <div class="current-hours-row"></div>
+        <div class="body-row" ng-repeat="day in days">
             <div ng-repeat="i in total[day] track by $index">
                 <span>{{ i }}</span>
             </div>
@@ -53,25 +95,32 @@
 
     <div ng-repeat="(major, staff) in majors" class="major-column">
 
-        <h1 style="text-align: center;">{{ major }}</h1>
+        <!-- Header content -->
+        <div class="majors-row"><h1>{{ major }}</h1></div>
 
+        <!-- Run through the staff members. -->
         <div ng-repeat="person in staff" class="staff-column">
-            <span class="name">{{ person.name }}</span>
-            <span class="max">{{ person.max }}</span>
 
-            <div class="day" ng-repeat="day in days"> 
+            <div class="name-row"><h2>{{ person.name }}</h2></div>
+            <div class="max-hours-row"><h3>{{ person.max }}</h3></div>
+            <div class="current-hours-row"><h3>{{ .5*person.total }}</h3></div>
+
+            <div class="body-row" ng-repeat="day in days"> 
                 <div mask="person.availability[day]" 
                      list="person.schedule[day]" 
-                     sums="sums[major][day]"
-                     total="total[day]"
+                     inc1="total[day]"
+                     inc2="sums[major][day]"
+                     acc="person.total"
                      check-list>
                 </div>
             </div>
         </div> 
-        <div ng-repeat"(major, days) in sums" class="partial-sum">
+
+        <div ng-repeat"(major, days) in sums" class="partial-sum-column">
             <span class="name"></span>
             <span class="max"></span>
-            <div class="day" ng-repeat="day in days">
+            <span class="max"></span>
+            <div class="body-row" ng-repeat="day in days">
                 <div ng-repeat="i in sums[major][day] track by $index">
                     <span>{{ i }}</span>
                 </div>
@@ -80,23 +129,26 @@
 
     </div>
 
-    <div class="partial-sum">
-        <h1 style="text-align: center;">V</h1>
-        <span class="name"></span>
-        <span class="max"></span>
-        <div class="day" ng-repeat="day in days">
+    <div class="sum-column">
+        <!-- Header content -->
+        <div class="majors-row"></div>
+        <div class="names-row"></div>
+        <div class="max-hours-row"></div>
+        <div class="current-hours-row"></div>
+        <div class="body-row" ng-repeat="day in days">
             <div ng-repeat="i in total[day] track by $index">
                 <span>{{ i }}</span>
             </div>
         </div>
     </div>
 
-    <div style="float: left;" >
-        <h1 style="text-align: center;">T</h1>
-        <span class="name"></span>
-        <span class="max"></span>
-        <div count="days" time-list>
-        </div>
+    <div class="time-column" >
+        <!-- Header content -->
+        <div class="majors-row"></div>
+        <div class="names-row"></div>
+        <div class="max-hours-row"></div>
+        <div class="current-hours-row"></div>
+        <div class="body-row" count="days" time-list></div>
     </div>
 
 </div>
