@@ -1,6 +1,6 @@
 var mongoose  = require('mongoose')
  ,  Schema    = mongoose.Schema
- ,  Subject   = require('./subject');
+ ,  Subject   = require('./subjects').Subject;
 
 // Setup the use model.
 var Course = exports.Course = mongoose.model('Course', {

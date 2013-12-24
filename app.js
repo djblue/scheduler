@@ -10,6 +10,7 @@ var util        = require('util')
   , auth        = require('./api/auth')
   , users       = require('./api/users')
   , courses     = require('./api/courses')
+  , subjects    = require('./api/subjects')
   , staff       = require('./api/staff');
 
 // all environments
@@ -42,6 +43,7 @@ if (!!process.env.MONGOLAB_URI) {
 auth.setup(app);
 users.setup(app);
 staff.setup(app);
+subjects.setup(app);
 courses.setup(app);
 
 //mongooseApi.serveModels(app);

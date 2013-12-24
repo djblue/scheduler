@@ -9,8 +9,7 @@ var Subject = exports.Subject = mongoose.model('Subject', {
 });
 
 var list = function (req, res) {
-    Course.find()
-        .populate('subject')
+    Subject.find()
         .exec(function (err, staff) {
             if (err) {
                 res.json(err);
@@ -21,5 +20,5 @@ var list = function (req, res) {
 };
 
 exports.setup = function (app) {
-    app.get('/api/courses', list);
+    app.get('/api/subjects', list);
 };
