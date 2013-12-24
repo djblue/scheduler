@@ -219,3 +219,14 @@ app.controller('schedulerController', function ($scope, $http) {
         }
     });
 });
+
+app.controller('searchController', function ($scope, $http) {
+     
+    $http.get('/api/staff').success(function (data) {
+        $scope.data = data;
+    });
+
+    $scope.$watch('search', function () {
+    });
+
+});
