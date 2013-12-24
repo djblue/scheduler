@@ -50,12 +50,12 @@ module.exports = function(grunt) {
             },
             reload: {
                 files: [
-                    'public/stylesheets/*.css',
+                    'public/styles/*.scss',
                     'public/javascripts/**/*.js',
-                    'public/javascripts/**/*.ejs',
                     'public/**/*.html',
                     'views/*'
                 ],   
+                tasks: ['sass:dist'],
                 options: {
                      livereload: true
                 }
@@ -138,7 +138,15 @@ module.exports = function(grunt) {
             unit: {
                 configFile: 'karma.conf.js'
             }
+        },
+        sass: {
+            dist: {
+              files: {
+                './public/styles/main.css': './public/styles/main.scss'
+              }
         }
+  }
+
     });
 
     // Load the plugins 
@@ -157,6 +165,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     // Grunt task to open things like a web browser
     grunt.loadNpmTasks('grunt-open');
+    // Grunt task for the css preprocessing
+    grunt.loadNpmTasks('grunt-contrib-sass');
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-jasmine-node');
@@ -164,6 +174,7 @@ module.exports = function(grunt) {
 
     // register all of the grunt tasks
     grunt.registerTask('default', ['shell:mongo','express:prod']);
-    grunt.registerTask('server', ['shell:mongo', 'express:dev','watch:reload', 'watch:express']);
+    grunt.registerTask('server', ['shell:mongo', 'express:dev', 
+        'sass:dist', 'watch:reload', 'watch:express']);
     grunt.registerTask('test', ['shell:mongo', 'watch:jasmine']);
 };
