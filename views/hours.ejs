@@ -9,21 +9,16 @@
     <script src="/bower_components/underscore/underscore-min.js"/></script>
     <script src="/bower_components/angular/angular.min.js"></script>
     <script>
-        /* grab user info */
+        /* user info */
         window.staff = <%- staff %>;
-        console.log(window.staff);
     </script>
     <script src="/javascripts/hours.js"></script>
-    <script src="//djblue.us.to:35729/livereload.js"></script>
-    <link rel="stylesheet" type="text/css" href="/bower_components/pure/base-min.css">
-    <link rel="stylesheet" type="text/css" href="/bower_components/pure/pure-min.css">
     <link rel="stylesheet" type="text/css" href="/styles/default.css">
 </head>
-<body ng-controller="hoursController">
+<body>
+<div class="container" ng-controller="hoursController">
 
-<div class="pure-g-r">
-
-    <div class="center pure-u-3-5">
+    <div class="left-column">
         <h1>Please Select Availability</h1>
         <div class="check-list">
             <span>Time</span>
@@ -38,7 +33,7 @@
         <div list="days.friday" check-list>F</div>
     </div>
 
-    <div class="pure-u-2-5">
+    <div class="right-column">
         <h1>{{ staff.name }}</h1>
         <h2>{{ staff.email }}</h2>
         <h2>{{ staff.major.title }}</h2>
@@ -54,10 +49,8 @@
             </optgorup>
         </select>
     </div>
-    <div class="pure-u-1">
-        <button style="float: right;"
-            class="pure-button pure-button-primary" ng-click="submit()">Submit</button>
-    </div>
+
+    <button style="float: right;" ng-click="submit()">Submit</button>
 </div>
 
 </body>
