@@ -54,6 +54,10 @@ var add = function (req, res) {
         res.json(400, {
             message: '\'email\' field required to add staff.'
         });
+    } else if (!req.body.major) {
+        res.json(400, {
+            message: '\'email\' field required to add staff.'
+        });
     } else {
         Staff.create({
             name: req.body.name,
