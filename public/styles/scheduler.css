@@ -1,5 +1,37 @@
+/**
+ * This this theme file is directly influenced by the pure css framework.
+ *   http://purecss.io/ 
+ */
+
 body {
     padding-left: 150px;
+}
+a {
+    color: #265778;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+button {
+    display: inline-block;
+    background: #0078e7;
+    cursor: pointer;
+    border: 0;
+    border-radius: 2px;
+    font-size: 100%;
+    padding: .5em 1.5em;
+    color: #fff;
+}
+
+button:hover {
+}
+
+#save {
+    text-align: center;
+    position: absolute;
+    left: 30px;
+    bottom: 10px;
 }
 
 #menu {
@@ -48,4 +80,13 @@ body {
 
 #menu a:hover {
     background: #555;
+}
+
+#footer {
+    border-top: 1px solid #eee;
+    background: rgb(250, 250, 250);
+    position: absolute;
+    padding: 20px;
+    left: 150px;
+    right: 0px;
 }

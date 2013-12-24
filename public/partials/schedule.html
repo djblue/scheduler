@@ -10,8 +10,11 @@
      }
     .scheduler {
         display: inline-block;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 20px;
+        padding: 20px;
+        white-space: nowrap;
+    }
+    .scheduler  div {
+        white-space: normal;
     }
     div[class*=column] {
         display: inline-block;
@@ -101,7 +104,7 @@
         <!-- Run through the staff members. -->
         <div ng-repeat="person in staff" class="staff-column">
 
-            <div class="name-row"><h2>{{ person.name }}</h2></div>
+            <div class="name-row"><h2><a href="#/staff/{{person._id}}">{{ person.name }}</a></h2></div>
             <div class="max-hours-row"><h3>{{ person.max }}</h3></div>
             <div class="current-hours-row"><h3>{{ .5*person.total }}</h3></div>
 

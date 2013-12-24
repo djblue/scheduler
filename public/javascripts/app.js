@@ -8,6 +8,21 @@ var app = angular.module('app', ['ngRoute'])
             when('/users', {
                 templateUrl: 'partials/users.html'
             }).
+            when('/staff', {
+                templateUrl: 'partials/allStaff.html'
+            }).
+            when('/staff/:id', {
+                templateUrl: 'partials/singleStaff.html'
+            }).
+            when('/search', {
+                templateUrl: 'partials/search.html'
+            }).
+            when('/help', {
+                templateUrl: 'partials/help.html'
+            }).
+            when('/log', {
+                templateUrl: 'partials/log.html'
+            }).
             otherwise({ redirectTo: '/' });
     }]);
 
@@ -38,7 +53,7 @@ app.directive('checkList', function () {
                 $scope.inc1[i] = 0;
             }
         }
-        if (!!$scope.inc1) {
+        if (!!$scope.inc2) {
             for (var i = 0; i < $scope.inc2.length; i++) {
                 $scope.inc2[i] = 0;
             }
@@ -189,9 +204,12 @@ app.controller('schedulerController', function ($scope, $http) {
             data[i].schedule.thursday = Array(20);
             data[i].schedule.friday = Array(20);
         }
-        $scope.majors = _.groupBy(data, 'major');
-        for (major in Object.keys($scope.majors)) {
-            $scope.sums[major] = {
+        $scope.majors = _.groupBy(data, function (obj) {
+            return obj.major.title;
+        });
+        var majors = Object.keys($scope.majors);
+        for (var i = 0; i < majors.length; i++) {
+            $scope.sums[majors[i]] = {
                 monday: Array(20),
                 tuesday: Array(20),
                 wednesday: Array(20),
