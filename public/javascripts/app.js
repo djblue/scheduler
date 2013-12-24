@@ -9,7 +9,7 @@ var app = angular.module('app', ['ngRoute'])
                 templateUrl: 'partials/users.html'
             }).
             when('/staff', {
-                templateUrl: 'partials/allStaff.html'
+                templateUrl: 'partials/staff.html'
             }).
             when('/staff/:id', {
                 templateUrl: 'partials/singleStaff.html'
@@ -218,6 +218,45 @@ app.controller('schedulerController', function ($scope, $http) {
             }
         }
     });
+});
+
+// staff controller
+app.controller("StaffController",function ($scope, $http) {
+
+    $http.get('/api/staff').success(function(data) {
+        $scope.staff = data;
+    });
+
+    $http.get('/api/subjects').success(function (data) {
+        $scope.subjects = data;
+    });
+
+    $scope.addContact = function() {
+        console.log($scope.major);
+        $http.post('/api/staff', {
+            name: $scope.name, 
+            email: $scope.email, 
+            major: $scope.major
+        }).success(function(data){
+            $scope.staff.push(data);
+            $scope.newName = '';
+            $scope.newEmail = '';
+            $scope.major = '';
+        });
+    };
+     
+    $scope.removeContact = function(memberToRemove) {
+        var index = $scope.staff.indexOf(memberToRemove);
+        $http.delete('/api/staff/' + memberToRemove._id).success(function(){
+            $scope.staff.splice(index, 1);    
+        });
+    };
+     
+    $scope.clearContact = function(contact) {
+        contact.name = '';
+        contact.email = '';
+        contact.major = '';
+    };
 });
 
 app.controller('searchController', function ($scope, $http) {

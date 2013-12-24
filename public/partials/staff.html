@@ -1,0 +1,33 @@
+<div id="staff" ng-controller="StaffController">
+    <table>
+       <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Major</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="contact in staff">
+                <td>{{contact.name}}</td>
+                <td>{{contact.email}}</td>
+                <td>{{contact.major.prefix}}</td>
+                <td><button class ="btn-orange" 
+                    ng-click="clearContact(contact)">clear</button></td>
+                <td><button class ="btn-red"
+                    ng-click="removeContact(contact)">Remove</button></td>
+            </tr>
+            <!--Add staff-->
+            <tr>
+                <td><input type="text" ng-model="name"/></td>
+                <td><input type="text" ng-model="email"/></td>
+                <td><select ng-model="major" 
+                    ng-options="m._id as m.prefix for m in subjects"></select>
+                </td>
+                <td><button ng-click="addContact()">add</button></td>
+            </tr> 
+        </tbody>
+    </table>
+</div>
