@@ -225,24 +225,38 @@ app.controller("StaffController",function ($scope, $http) {
 
     $http.get('/api/staff').success(function(data) {
         $scope.staff = data;
+        $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
+            return item.location.title; 
+        });
     });
+
+    $scope.$watch('staff', function () {
+        $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
+            return item.location.title; 
+        });
+        console.log($scope.staffByLoc);
+    }, true);
 
     $http.get('/api/subjects').success(function (data) {
         $scope.subjects = data;
-        console.log(data);
+    });
+
+    $http.get('/api/locations').success(function (data) {
+        $scope.locations = data;
     });
 
     $scope.addContact = function() {
-        console.log($scope.major);
         $http.post('/api/staff', {
             name: $scope.name, 
             email: $scope.email, 
-            major: $scope.major
+            major: $scope.major,
+            location: $scope.location
         }).success(function(data){
             $scope.staff.push(data);
-            $scope.newName = '';
-            $scope.newEmail = '';
+            $scope.name = '';
+            $scope.email = '';
             $scope.major = '';
+            $scope.location = '';
         });
     };
      

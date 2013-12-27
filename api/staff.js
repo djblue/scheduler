@@ -2,7 +2,8 @@ var mongoose  = require('mongoose')
  ,  Schema    = mongoose.Schema
  ,  auth      = require('./auth')
  ,  _         = require('underscore')
- ,  mongooseTypes = require("mongoose-types");
+ ,  mongooseTypes = require("mongoose-types")
+ , Location   = require('./locations').Location;
 
 mongooseTypes.loadTypes(mongoose);
 
@@ -12,6 +13,7 @@ var Staff = exports.Staff = mongoose.model('Staff', {
     name: { type: String, required: true },
     email: { type: mongoose.SchemaTypes.Email, required: true },
     major: { type: String, ref: 'Subject', required: true },
+    location: { type: String, ref: 'Location', required: true },
     courses: [{ type: String, ref: 'Course' }],
     availability: {
         monday: [],
@@ -35,6 +37,7 @@ var list = function (req, res) {
     Staff.find()
         .populate('major')
         .populate('courses')
+        .populate('location')
         .exec(function (err, staff) {
             if (err) {
                 res.json(err);
@@ -58,20 +61,33 @@ var add = function (req, res) {
         res.json(400, {
             message: '\'email\' field required to add staff.'
         });
+    } else if (!req.body.location) {
+        res.json(400, {
+            message: '\'email\' field required to add staff.'
+        });
     } else {
+
         Staff.create({
             name: req.body.name,
             email: req.body.email,
-            major: req.body.major
+            major: req.body.major,
+            location: req.body.location
         }, function (err, staff) {
-            if (err) {
-                res.json(500, {
-                    message: 'create error',
-                    error: err
-                });
-            } else {
-                res.json(201, staff);
-            }
+
+            Staff.findById(staff._id)
+                .populate('major')
+                .populate('courses')
+                .populate('location')
+                .exec(function (err, staff) {
+                    if (err) {
+                        res.json(500, {
+                            message: 'create error',
+                            error: err
+                        });
+                    } else {
+                        res.json(201, staff);
+                    }
+                });  
         });
     }
 }; 
