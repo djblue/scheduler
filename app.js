@@ -9,6 +9,7 @@ var util        = require('util')
   , passport    = require('passport')
   , auth        = require('./api/auth')
   , users       = require('./api/users')
+  , locations   = require('./api/locations')
   , courses     = require('./api/courses')
   , subjects    = require('./api/subjects')
   , staff       = require('./api/staff');
@@ -43,6 +44,7 @@ if (!!process.env.MONGOLAB_URI) {
 auth.setup(app);
 users.setup(app);
 staff.setup(app);
+locations.setup(app);
 subjects.setup(app);
 courses.setup(app);
 

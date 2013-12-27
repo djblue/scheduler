@@ -229,6 +229,7 @@ app.controller("StaffController",function ($scope, $http) {
 
     $http.get('/api/subjects').success(function (data) {
         $scope.subjects = data;
+        console.log(data);
     });
 
     $scope.addContact = function() {

@@ -7,12 +7,14 @@ var Course = exports.Course = mongoose.model('Course', {
     _id: String,
     subject: {type: String, ref: 'Subject'},
     number: { type:String },
-    title: String
+    title: String,
+    location: { type: String, ref: 'Location' }
 });
 
 var list = function (req, res) {
     Course.find()
         .populate('subject')
+        .populate('location')
         .exec(function (err, staff) {
             if (err) {
                 res.json(err);
