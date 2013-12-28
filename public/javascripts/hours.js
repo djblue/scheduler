@@ -1,5 +1,19 @@
 var app = angular.module('app', []);
 
+app.directive('multipleSelect', function ($timeout) {
+    return {
+        restrict: 'A', // matches using attributes
+        link: function (scope, element, attrs) {
+            $timeout(function () {
+                console.log(scope.selectedCourses);
+                element.find('select')
+                    .multiSelect({ selectableOptgroup: true })
+                    .multiSelect('select', scope.selectedCourses);
+            });
+        }
+    }
+});
+
 app.directive('checkList', function () {
 
     function checkController ($scope) {
@@ -50,15 +64,15 @@ app.directive('checkList', function () {
 
 app.controller('hoursController', function ($scope, $http) {
 
-    $http.get('/api/courses')
+    // try to apply previous data
+    $scope.staff = window.staff;
+
+    $http.get('/api/courses/'+$scope.staff.location)
         .success(function (data) {
             $scope.catalog = _.groupBy(data, function (val) {
                 return val.subject.title;
             });
         });
-
-    // try to apply previous data
-    $scope.staff = window.staff;
 
     // staff member with no availability listed
     if ($scope.staff.availability.monday.length === 0) {

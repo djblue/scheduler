@@ -24,6 +24,19 @@ var list = function (req, res) {
         });
 };
 
+var listByLocation = function (req, res) {
+    Course.find({ location: req.params.location })
+        .populate('subject')
+        .exec(function (err, courses) {
+            if (err) {
+                res.json(err);
+            } else {
+                res.json(courses);
+            }
+        });
+};
+
 exports.setup = function (app) {
     app.get('/api/courses', list);
+    app.get('/api/courses/:location', listByLocation)
 };
