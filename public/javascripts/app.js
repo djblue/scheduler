@@ -230,11 +230,31 @@ app.controller("StaffController",function ($scope, $http) {
         });
     });
 
+    ///
+    $scope.bt1 = "Clear ALL";
+
+    $scope.allEditable = function(){
+        if($scope.bt1 === "Clear ALL"){
+            $scope.bt1 = "Select ALL";
+            for(var i = 0; i < $scope.staff.length; i++){
+                $scope.staff[i].editable = false;
+                $scope.update($scope.staff[i]);
+            }
+        }else{
+            $scope.bt1 = "Clear ALL";
+            for(var i = 0; i < $scope.staff.length; i++){
+                $scope.staff[i].editable = true;
+                $scope.update($scope.staff[i]);
+            }
+        }
+    };
+    ///
+
     $scope.$watch('staff', function () {
         $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
             return item.location.title; 
         });
-        console.log($scope.staffByLoc);
+        //console.log($scope.staffByLoc);
     }, true);
 
     $http.get('/api/subjects').success(function (data) {
@@ -245,6 +265,12 @@ app.controller("StaffController",function ($scope, $http) {
         $scope.locations = data;
     });
 
+    $scope.update = function(contact){
+        $http.put('/api/staff/' + contact._id, {editable: !contact.editable}).success(function(){
+            contact.editable = !contact.editable;
+        });
+    };
+    
     $scope.addContact = function() {
         $http.post('/api/staff', {
             name: $scope.name, 

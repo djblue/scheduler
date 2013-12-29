@@ -13,6 +13,15 @@
             <td><button ng-click="addContact()">add</button></td>
         </tr> 
     </table>
+    <div>
+        <table>
+            <tr>
+                <td><button class ="btn-green" ng-click="allEditable()">Send ALL</button></td>
+                <td><button class ="btn-green" ng-click="allEditable()">{{bt1}}</button></td>
+            </tr>
+        </table>
+    </div>
+
     <div ng-repeat="(location, contacts) in staffByLoc">
         <h2>{{ location }}</h2>
         <table>
@@ -23,6 +32,9 @@
                     <th>Major</th>
                     <th></th>
                     <th></th>
+                    <th></th>
+                    <th></th>
+                   
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +46,9 @@
                         ng-click="clearContact(contact)">clear</button></td>
                     <td><button class ="btn-red"
                         ng-click="removeContact(contact)">Remove</button></td>
+                    <td><button class ="btn-green"
+                        ng-click="clearContact(contact)">Email</button></td>
+                    <td><input type = "checkbox" ng-checked = "contact.editable" ng-click="update(contact)"></td>
                 </tr>
             </tbody>
         </table>
