@@ -102,7 +102,7 @@ app.controller('hoursController', function ($scope, $http) {
     $scope.times = [];
 
     var j = 9, afterNoon = false;
-    for (var i = 1; i <= 20; i++) {
+    for (var i = 0; i <= 20; i++) {
         var time;
         // hit noon
         if (j % 12 === 0) {
@@ -121,12 +121,19 @@ app.controller('hoursController', function ($scope, $http) {
             j++;
         }
 
+        /*
         if (!afterNoon) {
             time += ' AM';
         } else {
             time += ' PM';
         }
-        $scope.times[i] = time;
+        */
+        if (i != 0) {
+            $scope.times[i-1] += '-' + time;
+        }
+        if (i != 20) {
+            $scope.times[i] = time;
+        }
     }
 
     $scope.submit = function () {

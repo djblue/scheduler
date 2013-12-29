@@ -17,10 +17,16 @@
     <script src="/javascripts/hours.js"></script>
     <link rel="stylesheet" type="text/css" href="/styles/main.css">
     <link rel="stylesheet" type="text/css" href="/bower_components/multiselect/css/multi-select.css"  >
+    <script src="//localhost:35729/livereload.js"></script>
     <style>
         body {
             padding: 0;
             margin: 0;
+            background: gray;
+        }
+        h1 {
+            padding-top: 10px;
+            padding-bottom: 4px;
         }
         .left-column {
             width: 49%;
@@ -34,43 +40,74 @@
         .ms-container ul.ms-list {
             height: 408px;
         }
+        .courses {
+            width: 76%;
+            margin: 0 auto;
+        }
         .container {
+            background: white;
             margin: 20px auto;
+            padding: 20px;
+            box-shadow: 0px 1px 2px black;
+            width: 960px;
         }
     </style>
 </head>
 <body>
 <div class="container" ng-controller="hoursController">
 
-    <div>
-        <button style="float: right; margin-right: 40px" ng-click="submit()">Submit</button>
-        <h1>{{ staff.name }}</h1>
-        <h2>{{ staff.email }}</h2>
-        <h2>{{ staff.major.title }}</h2>
-        <input ng-model="maxHours" type="text" placeholder="Maximum Hours">
-        <input ng-model="phoneNumber" type="text" placeholder="Phone Number">
+    <div class="grid">
+        <div class="col-1-2"> 
+            <h1>{{ staff.name }}</h1>
+            <h2>{{ staff.email }}</h2>
+            <h2>{{ staff.major.title }}</h2>
+        </div> 
+        <div class="col-1-2"> 
+            <button style="float: right;" ng-click="submit()">Submit</button>
+        </div> 
     </div>
 
-    <div class="left-column">
-        <h1>Please Select Availability</h1>
-        <div class="time-list">
-            <span>Time</span>
-            <ol>
-                <li ng-repeat="time in times">{{ time }} </li>
-            </ol>
+    <div class="grid">
+        <div class="col-1-2">
+            <label>Maximum Hours:</label>
+            <input ng-model="maxHours" type="text" placeholder="Maximum Hours">
         </div>
-        <div class="check-list" list="days.monday" check-list>M</div>
-        <div class="check-list" list="days.tuesday" check-list>Tu</div>
-        <div class="check-list" list="days.wednesday" check-list>W</div>
-        <div class="check-list" list="days.thursday" check-list>Th</div>
-        <div class="check-list" list="days.friday" check-list>F</div>
+        <div class="col-1-2">
+            <label>Phone Number:</label>
+            <input ng-model="phoneNumber" type="text" placeholder="Phone Number">
+        </div>
     </div>
 
-    <div class="right-column">
-        
-        <h1>Select Courses</h1>
-        <div multiple-select>
-            <select id="courses" multiple ng-model="selectedCourses">
+    <div class="grid">
+        <div class="col-1-2"><h1>Please Select Availability</h1></div>
+        <div class="col-1-2"><h1>Select Courses</h1></div>
+    </div>
+
+    <div class="grid">
+
+    <div class="col-1-2">
+        <div class="grid">
+            <div class="col-1-4">
+                <span>Time</span>
+                <ol>
+                    <li class="right" ng-repeat="time in times">{{ time }} </li>
+                </ol>
+            </div>
+            <div class="col-3-4">
+                <div class="grid">
+                    <div class="col-1-5" list="days.monday" check-list>M</div>
+                    <div class="col-1-5" list="days.tuesday" check-list>Tu</div>
+                    <div class="col-1-5" list="days.wednesday" check-list>W</div>
+                    <div class="col-1-5" list="days.thursday" check-list>Th</div>
+                    <div class="col-1-5" list="days.friday" check-list>F</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-1-2">
+        <div class="courses" multiple-select>
+            <select multiple ng-model="selectedCourses">
                 <optgroup label="{{subject}}" 
                     ng-repeat="(subject, courses) in catalog">
                     <option value="{{course._id}}" ng-repeat="course in courses">
@@ -79,6 +116,8 @@
                 </optgorup>
             </select>
         </div>
+    </div>
+
     </div>
 
 </div>

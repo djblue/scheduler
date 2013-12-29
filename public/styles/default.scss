@@ -34,7 +34,6 @@ input, select {
     border-radius: 4px;
 }
 .container {
-    max-width: 800px;
     margin: 0 auto;
 }
 .check-list:first-child {
@@ -43,8 +42,7 @@ input, select {
 }
 .check-list {
     text-align: center;
-    width: 60px;
-    display: inline-block;
+    width: 100%;
 }
 .time-list{
     width: 80px;
