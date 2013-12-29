@@ -54,7 +54,8 @@
     </style>
 </head>
 <body>
-<div class="container" ng-controller="hoursController">
+<script type="text/ng-template" id="main.html">
+<div class="container">
 
     <div class="grid">
         <div class="col-1-2"> 
@@ -121,6 +122,19 @@
     </div>
 
 </div>
-
+</script>
+<script type="text/ng-template" id="success.html">
+<div class="container">
+    <h1><b class="blue">Success</b> Thank you for submitting your availability.</h1>
+</div>
+</script>
+<div ng-controller="hoursController">
+    <div ng-if="!success">
+        <div ng-include="'main.html'"></div>
+    </div>
+    <div ng-if="!!success">
+        <div ng-include src="'success.html'"></div>
+    </div>
+</div>
 </body>
 </html>

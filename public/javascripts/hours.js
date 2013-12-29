@@ -5,7 +5,6 @@ app.directive('multipleSelect', function ($timeout) {
         restrict: 'A', // matches using attributes
         link: function (scope, element, attrs) {
             $timeout(function () {
-                console.log(scope.selectedCourses);
                 element.find('select')
                     .multiSelect({ selectableOptgroup: true })
                     .multiSelect('select', scope.selectedCourses);
@@ -144,7 +143,7 @@ app.controller('hoursController', function ($scope, $http) {
             max: $scope.maxHours
         })
         .success(function (data) {
-            console.log(data);
+            $scope.success = true;
         })
         .error(function () {
         });
