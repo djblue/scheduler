@@ -1,65 +1,4 @@
-var app = angular.module('app', []);
-
-app.directive('multipleSelect', function ($timeout) {
-    return {
-        restrict: 'A', // matches using attributes
-        link: function (scope, element, attrs) {
-            $timeout(function () {
-                element.find('select')
-                    .multiSelect({ selectableOptgroup: true })
-                    .multiSelect('select', scope.selectedCourses);
-            });
-        }
-    }
-});
-
-app.directive('checkList', function () {
-
-    function checkController ($scope) {
-
-        $scope.status = Array($scope.list.length);
-
-        // initialize the check list
-        for (var i = 0; i < $scope.list.length; i++) {
-            // is the item masked out?
-            if (!!$scope.mask && !$scope.mask[i]) {
-                $scope.status[i] = 'disabled';
-            } else {
-                if (!$scope.list[i]) {
-                    $scope.list[i] = 0;
-                    $scope.status[i] = 'false';
-                } else {
-                    $scope.status[i] = 'true';
-                }
-            }
-        }
-
-        $scope.check = function (i) {
-            if ($scope.status[i] !== 'disabled') {
-                if ($scope.list[i] === 0) {
-                    $scope.list[i] = 1;
-                    $scope.status[i] = 'true';
-                } else {
-                    $scope.list[i] = 0;
-                    $scope.status[i] = 'false';
-                }
-            }
-        }
-    }
-
-    return {
-        restrict: 'AE', // matches using attributes and elements name
-        //replace: true,
-        transclude: true,
-        scope: {
-            list: '=',
-            mask: '='
-        },
-        templateUrl: '/partials/checkList.html',
-        controller: checkController
-    }
-
-});
+var app = angular.module('app', ['app.directives']);
 
 app.controller('hoursController', function ($scope, $http) {
 
@@ -136,6 +75,7 @@ app.controller('hoursController', function ($scope, $http) {
     }
 
     $scope.submit = function () {
+        console.log($scope.maxHours);
         $http.post(document.URL, {
             availability: $scope.days,
             courses: $scope.selectedCourses,
