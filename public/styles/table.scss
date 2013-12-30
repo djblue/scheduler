@@ -1,0 +1,26 @@
+table {
+
+    width: 100%;
+    margin: 20px 0;
+    border-collapse:collapse;
+
+    th {
+        color: #999;
+        background: $grey;
+        padding:10px;
+        font-weight: normal;
+    }
+
+    td {
+        padding:10px;
+    }
+
+    tr {
+        text-align: center;
+    }
+
+    tr:hover {
+        background: $light;
+    }
+}
+

@@ -1,5 +1,5 @@
-<div ng-controller="searchController" class="search">
+<div class="container" ng-controller="searchController" class="search">
     <h1>Search</h1>
-    <input ng-model="search" placeholder="search by class"/>
+    <input type="text" ng-model="search" placeholder="search by class"/>
     <div ng-repeat="find in results" class="search-result"></div>
 </div>
