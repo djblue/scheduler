@@ -1,6 +1,12 @@
-var app         = require('./app').app
-  , server      = require('http').createServer(app);
+var fs     = require('fs')
+  , app    = require('./app').app
+  , https  = require('https');
 
+
+var options = {
+    key:  fs.readFileSync('./privatekey.pem'),
+    cert: fs.readFileSync('./certificate.pem')
+};
 
 // If all of the routes fail!!1
 app.use(function(req, res, next){
@@ -23,6 +29,6 @@ app.use(function(req, res, next){
     res.type('txt').send('Not found');
 });
 
-server.listen(app.get('port'), function () {
+https.createServer(options, app).listen(443, function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
