@@ -4,8 +4,8 @@ var fs     = require('fs')
 
 
 var options = {
-    key:  fs.readFileSync('./privatekey.pem'),
-    cert: fs.readFileSync('./certificate.pem')
+    key:  fs.readFileSync('./ssl/my-private-decrypted.key'),
+    cert: fs.readFileSync('./ssl/unified.crt')
 };
 
 // If all of the routes fail!!1
