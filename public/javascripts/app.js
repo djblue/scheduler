@@ -310,3 +310,10 @@ app.controller('searchController', function ($scope, $http) {
     });
 
 });
+
+app.controller('logController', function ($scope, $http) {
+
+    $http.get('/api/log').success(function (data) {
+        $scope.logs = data;
+    });
+});

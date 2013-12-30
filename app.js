@@ -12,7 +12,8 @@ var util        = require('util')
   , locations   = require('./api/locations')
   , courses     = require('./api/courses')
   , subjects    = require('./api/subjects')
-  , staff       = require('./api/staff');
+  , staff       = require('./api/staff')
+  , log         = require('./api/log');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -47,6 +48,7 @@ staff.setup(app);
 locations.setup(app);
 subjects.setup(app);
 courses.setup(app);
+log.setup(app);
 
 //mongooseApi.serveModels(app);
 var db = mongoose.connection; 

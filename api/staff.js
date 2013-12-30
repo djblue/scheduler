@@ -3,7 +3,8 @@ var mongoose  = require('mongoose')
  ,  auth      = require('./auth')
  ,  _         = require('underscore')
  ,  mongooseTypes = require("mongoose-types")
- , Location   = require('./locations').Location;
+ , Location   = require('./locations').Location
+ , log        = require('./log');
 
 mongooseTypes.loadTypes(mongoose);
 
@@ -74,6 +75,8 @@ var add = function (req, res) {
             location: req.body.location
         }, function (err, staff) {
 
+            log.write('Staff Added', staff.name + ' was added.');
+
             Staff.findById(staff._id)
                 .populate('major')
                 .populate('courses')
@@ -97,6 +100,7 @@ var remove = function (req, res) {
         if (err) {
             res.json(err);
         } else {
+            log.write('Staff Removed', staff.name + ' was removed.');
             res.json(staff);
         }
     }); 
@@ -108,6 +112,7 @@ var update = function (req, res) {
             if (err) {
                 res.json(500, err);
             } else {
+                log.write('Staff Updated', staff.name + ' was updated.');
                 res.json(200, staff);
             }
         });
@@ -136,13 +141,14 @@ var getHours = function (req, res) {
 };
 
 var submitHours = function (req, res) {
-    console.log(_.pick( req.body, 'availability', 'courses', 'phone', 'max'));
     Staff.findByIdAndUpdate(req.params.id, req.body)
         .exec(function (err, staff) {
             if (err) {
                 res.json(500, err);
             } else {
                 res.json(200, staff);
+                log.write('Staff Updated',
+                    staff.name + ' submitted their hours.');
             }
         });
 };
