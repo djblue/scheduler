@@ -66,11 +66,3 @@ $padding: 10px;
     padding-right: $padding / 2;
     padding-left: $padding / 2;
 }
-
-[class*='col-']:first-of-type {
-    padding-left: 0;
-}
-
-[class*='col-']:last-of-type {
-    padding-right: 0;
-}
