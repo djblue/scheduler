@@ -5,7 +5,8 @@ var mongoose  = require('mongoose')
  ,  mongooseTypes = require("mongoose-types")
  , Location   = require('./locations').Location
  , Course     = require('./courses').Course
- , log        = require('./log');
+ , log        = require('./log')
+ , nodemailer = require("nodemailer");
 
 mongooseTypes.loadTypes(mongoose);
 
@@ -119,6 +120,68 @@ var update = function (req, res) {
         });
 };
 
+var requestHoursAll = function (req, res) {
+
+    // create transport method
+    var smtpTransport = nodemailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: req.body.user,
+            pass: req.body.pass
+        }
+    });
+
+    Staff.find({}, 'email')
+        .exec(function (err, staff) {
+            smtpTransport.sendMail({
+                from: req.body.user,
+                to: _.pluck(staff, 'email').join(','),
+                subject: 'Please Submit your Hours',
+                html: 'Please go to <a href="https://djblue.us/staff/'+ 
+                      staff._id +
+                      '">this link</a> and fill out your availability.'
+            }, function (err, response) {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(response);
+                }
+            });
+
+        });
+};
+
+var requestHoursById = function (req, res) {
+    
+    // create transport method
+    var smtpTransport = nodemailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: req.body.user,
+            pass: req.body.pass
+        }
+    });
+
+    Staff.findById(req.params.id)
+        .exec(function (err, staff) {
+            smtpTransport.sendMail({
+                from: req.body.user,
+                to: staff.email,
+                subject: 'Please Submit your Hours',
+                html: 'Please go to <a href="https://djblue.us/staff/'+ 
+                      staff._id +
+                      '">this link</a> and fill out your availability.'
+            }, function (err, response) {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(response);
+                }
+            });
+        });
+    
+};
+
 var getHours = function (req, res) {
 
     Staff.findById(req.params.id)
@@ -168,6 +231,9 @@ exports.setup = function (app) {
     app.post('/api/staff', add);
     app.put('/api/staff/:id', update);
     app.delete('/api/staff/:id', remove);
+
+    app.post('/api/email', requestHoursAll);
+    app.post('/api/email/:id', requestHoursById);
 
     app.get('/staff/:id', getHours);
     app.post('/staff/:id', submitHours);
