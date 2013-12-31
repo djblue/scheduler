@@ -10,7 +10,7 @@ var User = exports.User = mongoose.model('User', {
     firstname: String,
     lastname: String,
     password: String,
-    email: String,
+    email: String
 });
 
 exports.setup = function (app) {

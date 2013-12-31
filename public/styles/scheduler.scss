@@ -13,7 +13,10 @@ a {
 a:hover {
     text-decoration: underline;
 }
-button {
+button,
+div[class*='btn'],
+input[class*='btn']
+{
     display: inline-block;
     background: #0e90d2;
     cursor: pointer;

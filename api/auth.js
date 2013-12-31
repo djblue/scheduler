@@ -35,7 +35,7 @@ exports.isAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) { 
         return next(null); 
     } else {
-        res.redirect('/');
+        res.redirect('/login');
     }
 };
 
@@ -51,9 +51,14 @@ exports.setup = function (app) {
 
     // Setup login route
     app.post('/api/login', passport.authenticate('local', {   
-        successRedirect: '/api/user'
-        /*failureFlash: true */
+        successRedirect: '/'
     })); 
+
+    app.get('/login', function (req, res) {
+        res.render('login', {
+            title: 'Login'
+        });
+    });
 
     // Setup logout route
     app.get('/api/logout', function(req, res){

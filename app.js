@@ -36,11 +36,7 @@ if ('development' == app.get('env')) {
     // connect to database
 }
 
-if (!!process.env.MONGOLAB_URI) {
-    mongoose.connect(process.env.MONGOLAB_URI);
-} else {
-    mongoose.connect('mongodb://localhost/test');
-}
+mongoose.connect('mongodb://localhost/test');
 
 auth.setup(app);
 users.setup(app);
@@ -49,6 +45,12 @@ locations.setup(app);
 subjects.setup(app);
 courses.setup(app);
 log.setup(app);
+
+app.get('/', auth.isAuthenticated, function (req, res) {
+    res.render('index', {
+        title: 'Login'
+    }); 
+});
 
 //mongooseApi.serveModels(app);
 var db = mongoose.connection; 

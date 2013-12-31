@@ -25,7 +25,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 .clear { clear: both; }
 .center { text-align: center; }
-input[type=text], select {
+.panel {
+    max-width: 240px;
+    background: white;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0px 1px 2px black;
+}
+input[type=text], 
+input[type=password], 
+select {
     padding: .5em .6em;
     margin: 10px 0px;
     border: 1px solid #ccc;

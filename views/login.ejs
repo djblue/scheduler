@@ -1,0 +1,47 @@
+<%- include header.ejs %>
+<style>
+    body {
+        background: gray;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<div class="panel">
+    <form method="post" action="/api/login">
+
+        <div class="grid">
+            <div class="col-1-1">
+                <label for="username">Username</label>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col-1-1">
+                <input style="width: 100%;" name="username" 
+                       placeholder="username" type="text"/>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col-1-1">
+                <label for="password">Password</label>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col-1-1">
+                <input style="width: 100%;" name="password"    
+                       placeholder="password" 
+                       type="password"/>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col-1-2">
+            </div>
+            <div class="col-1-2">
+                <input style="float: right;" class="btn" value="Login" type="submit"/>
+            </div>
+        </div>
+
+    </form>
+<div>
+<%- include footer.ejs %>
