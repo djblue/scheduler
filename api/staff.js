@@ -4,6 +4,7 @@ var mongoose  = require('mongoose')
  ,  _         = require('underscore')
  ,  mongooseTypes = require("mongoose-types")
  , Location   = require('./locations').Location
+ , Course     = require('./courses').Course
  , log        = require('./log');
 
 mongooseTypes.loadTypes(mongoose);
@@ -127,9 +128,18 @@ var getHours = function (req, res) {
                 if (err) {
                     res.json(500,err);
                 } else {
-                    res.render('hours', {
-                        staff: JSON.stringify(staff)
-                    });
+                    Course.find({ location: staff.location })
+                        .populate('subject')
+                        .exec(function (err, courses) {
+                            if (err) {
+                                res.json(500,err);
+                            } else {
+                                res.render('hours', {
+                                    staff: JSON.stringify(staff),
+                                    courses: JSON.stringify(courses)
+                                });
+                            }
+                        });
                 }
             } else {
                 res.render('error', {

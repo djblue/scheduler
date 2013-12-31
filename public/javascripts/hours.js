@@ -4,13 +4,9 @@ app.controller('hoursController', function ($scope, $http) {
 
     // try to apply previous data
     $scope.staff = window.staff;
-
-    $http.get('/api/courses/'+$scope.staff.location)
-        .success(function (data) {
-            $scope.catalog = _.groupBy(data, function (val) {
-                return val.subject.title;
-            });
-        });
+    $scope.catalog = _.groupBy(window.courses, function (val) {
+        return val.subject.title;
+    });
 
     // staff member with no availability listed
     if ($scope.staff.availability.monday.length === 0) {
