@@ -4,7 +4,14 @@ var mongoose  = require('mongoose')
 // Setup the use model.
 var Location = exports.Location = mongoose.model('Location', {
     _id: String,
-    title: String
+    title: String,
+    hours: {
+        monday: [Number],
+        tuesday: [Number],
+        wednesday: [Number],
+        thursday: [Number],
+        friday: [Number]
+    }
 });
 
 var list = function (req, res) {

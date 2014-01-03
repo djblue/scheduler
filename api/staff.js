@@ -123,12 +123,13 @@ var getHours = function (req, res) {
 
     Staff.findById(req.params.id)
         .populate('major')
+        .populate('location')
         .exec(function (err, staff) {
             if (staff.editable) {
                 if (err) {
                     res.json(500,err);
                 } else {
-                    Course.find({ location: staff.location })
+                    Course.find({ location: staff.location._id })
                         .populate('subject')
                         .exec(function (err, courses) {
                             if (err) {
