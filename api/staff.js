@@ -6,6 +6,7 @@ var mongoose  = require('mongoose')
  , Location   = require('./locations').Location
  , Course     = require('./courses').Course
  , log        = require('./log');
+ //, nodemailer = require("nodemailer");
 
 mongooseTypes.loadTypes(mongoose);
 
@@ -119,6 +120,58 @@ var update = function (req, res) {
         });
 };
 
+/*
+var requestHoursById = function (req, res) {
+    
+    // create transport method
+    var smtpTransport = nodemailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: req.body.user,
+            pass: req.body.pass
+        }
+    });
+
+    Staff.findById(req.params.id)
+        .exec(function (err, staff) {
+            if(err) { 
+                res.json(err);
+                return;
+            }
+            smtpTransport.sendMail({
+                from: req.body.user,
+                to: staff.email,
+                subject: 'Request to submit availability.',
+                html: 'Please go to https://djblue.us/staff/'+ 
+                      staff._id +
+                      ' and fill out your availability.'
+            }, function (err, response) {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(response);
+                }
+            });
+        });
+    
+};*/
+
+var listStaff = function (req, res) {
+
+    Staff.find({editable: true})
+        .exec(function (err, staff) {
+
+            if (err) {
+                res.end(500);
+            }
+
+            res.render('staffIndex', {
+                title: 'Staff Index',
+                staff: staff
+            });
+    });
+};
+
 var getHours = function (req, res) {
 
     Staff.findById(req.params.id)
@@ -170,6 +223,9 @@ exports.setup = function (app) {
     app.put('/api/staff/:id', update);
     app.delete('/api/staff/:id', remove);
 
+    //app.post('/api/email/:id', requestHoursById);
+
+    app.get('/staff', listStaff);
     app.get('/staff/:id', getHours);
     app.post('/staff/:id', submitHours);
 };
