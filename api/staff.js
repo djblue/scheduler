@@ -120,7 +120,41 @@ var update = function (req, res) {
         });
 };
 
+<<<<<<< HEAD
 /*
+=======
+var requestHoursAll = function (req, res) {
+
+    // create transport method
+    var smtpTransport = nodemailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: req.body.user,
+            pass: req.body.pass
+        }
+    });
+
+    Staff.find({}, 'email')
+        .exec(function (err, staff) {
+            smtpTransport.sendMail({
+                from: req.body.user,
+                to: _.pluck(staff, 'email').join(','),
+                subject: 'Please Submit your Hours',
+                html: 'Please go to <a href="https://djblue.us/staff/'+ 
+                      staff._id +
+                      '">this link</a> and fill out your availability.'
+            }, function (err, response) {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(response);
+                }
+            });
+
+        });
+};
+
+>>>>>>> f9ba818c3d7b724533c0f2307a7ead687c4400ce
 var requestHoursById = function (req, res) {
     
     // create transport method
@@ -134,6 +168,7 @@ var requestHoursById = function (req, res) {
 
     Staff.findById(req.params.id)
         .exec(function (err, staff) {
+<<<<<<< HEAD
             if(err) { 
                 res.json(err);
                 return;
@@ -145,6 +180,15 @@ var requestHoursById = function (req, res) {
                 html: 'Please go to https://djblue.us/staff/'+ 
                       staff._id +
                       ' and fill out your availability.'
+=======
+            smtpTransport.sendMail({
+                from: req.body.user,
+                to: staff.email,
+                subject: 'Please Submit your Hours',
+                html: 'Please go to <a href="https://djblue.us/staff/'+ 
+                      staff._id +
+                      '">this link</a> and fill out your availability.'
+>>>>>>> f9ba818c3d7b724533c0f2307a7ead687c4400ce
             }, function (err, response) {
                 if (err) {
                     res.json(err);
@@ -154,6 +198,7 @@ var requestHoursById = function (req, res) {
             });
         });
     
+<<<<<<< HEAD
 };*/
 
 var listStaff = function (req, res) {
@@ -170,6 +215,8 @@ var listStaff = function (req, res) {
                 staff: staff
             });
     });
+=======
+>>>>>>> f9ba818c3d7b724533c0f2307a7ead687c4400ce
 };
 
 var getHours = function (req, res) {

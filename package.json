@@ -9,7 +9,8 @@
     "mongoose": "~3.8.0",
     "passport-local": "~0.1.6",
     "passport": "~0.1.17",
-    "mongoose-types": "~1.0.3"
+    "mongoose-types": "~1.0.3",
+    "nodemailer": "~0.6.0"
   },
   "devDependencies": {
     "grunt": "latest",
