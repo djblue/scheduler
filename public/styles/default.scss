@@ -2,6 +2,8 @@ $border: 3px;
 * {
     margin: 0;
     padding: 0;
+    font-family:Arial,Helveticaans-serif;
+    line-height: 14pt;
 }
 b {
     font-weight: bold;
@@ -83,8 +85,9 @@ span[class*=check] {
     opacity: 0.75;
 }
 .check-disabled {
-    color: rgb(236, 164, 154);
-    background: #dd514c!important;
+    color: black;
+    opacity: 0.25;
+    cursor: default !important;
 }
 select {
     display: block;
