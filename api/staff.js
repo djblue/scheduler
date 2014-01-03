@@ -168,7 +168,7 @@ var listStaff = function (req, res) {
 
             res.render('staffIndex', {
                 title: 'Staff Index',
-                staff: staff
+                staff: _.sortBy(staff, 'name')
             });
     });
 };
