@@ -5,8 +5,8 @@ var mongoose  = require('mongoose')
  ,  mongooseTypes = require("mongoose-types")
  , Location   = require('./locations').Location
  , Course     = require('./courses').Course
- , log        = require('./log')
- , nodemailer = require("nodemailer");
+ , log        = require('./log');
+ //, nodemailer = require("nodemailer");
 
 mongooseTypes.loadTypes(mongoose);
 
@@ -39,7 +39,7 @@ var Staff = exports.Staff = mongoose.model('Staff', {
 var list = function (req, res) {
     Staff.find()
         .populate('major')
-        .populate('courses')
+        //.populate('courses')
         .populate('location')
         .exec(function (err, staff) {
             if (err) {
@@ -76,6 +76,11 @@ var add = function (req, res) {
             major: req.body.major,
             location: req.body.location
         }, function (err, staff) {
+
+            if (err) {
+                res.json(500, err);
+                return;
+            }
 
             log.write('Staff Added', staff.name + ' was added.');
 
@@ -120,37 +125,7 @@ var update = function (req, res) {
         });
 };
 
-var requestHoursAll = function (req, res) {
-
-    // create transport method
-    var smtpTransport = nodemailer.createTransport("SMTP",{
-        service: "Gmail",
-        auth: {
-            user: req.body.user,
-            pass: req.body.pass
-        }
-    });
-
-    Staff.find({}, 'email')
-        .exec(function (err, staff) {
-            smtpTransport.sendMail({
-                from: req.body.user,
-                to: _.pluck(staff, 'email').join(','),
-                subject: 'Please Submit your Hours',
-                html: 'Please go to <a href="https://djblue.us/staff/'+ 
-                      staff._id +
-                      '">this link</a> and fill out your availability.'
-            }, function (err, response) {
-                if (err) {
-                    res.json(err);
-                } else {
-                    res.json(response);
-                }
-            });
-
-        });
-};
-
+/*
 var requestHoursById = function (req, res) {
     
     // create transport method
@@ -180,18 +155,35 @@ var requestHoursById = function (req, res) {
             });
         });
     
+};*/
+
+var listStaff = function (req, res) {
+
+    Staff.find({editable: true})
+        .exec(function (err, staff) {
+
+            if (err) {
+                res.end(500);
+            }
+
+            res.render('staffIndex', {
+                title: 'Staff Index',
+                staff: _.sortBy(staff, 'name')
+            });
+    });
 };
 
 var getHours = function (req, res) {
 
     Staff.findById(req.params.id)
         .populate('major')
+        .populate('location')
         .exec(function (err, staff) {
             if (staff.editable) {
                 if (err) {
                     res.json(500,err);
                 } else {
-                    Course.find({ location: staff.location })
+                    Course.find({ location: staff.location._id })
                         .populate('subject')
                         .exec(function (err, courses) {
                             if (err) {
@@ -232,9 +224,9 @@ exports.setup = function (app) {
     app.put('/api/staff/:id', update);
     app.delete('/api/staff/:id', remove);
 
-    app.post('/api/email', requestHoursAll);
-    app.post('/api/email/:id', requestHoursById);
+    //app.post('/api/email/:id', requestHoursById);
 
+    app.get('/staff', listStaff);
     app.get('/staff/:id', getHours);
     app.post('/staff/:id', submitHours);
 };

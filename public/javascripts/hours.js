@@ -4,6 +4,7 @@ app.controller('hoursController', function ($scope, $http) {
 
     // try to apply previous data
     $scope.staff = window.staff;
+    $scope.mask = $scope.staff.location.hours;
     $scope.catalog = _.groupBy(window.courses, function (val) {
         return val.subject.title;
     });
@@ -20,7 +21,6 @@ app.controller('hoursController', function ($scope, $http) {
     } else {
         $scope.days = $scope.staff.availability;
     }
-
     if (!!$scope.staff.max) {
         $scope.maxHours = $scope.staff.max;
     }

@@ -1,0 +1,16 @@
+<%- include header.ejs %>
+<style>
+    body {
+        background: gray;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<div class="panel">
+    <ul>
+    <% for (var i = 0; i < staff.length; i++) { %>
+        <li><a href="/staff/<%=staff[i]._id%>"><%=staff[i].name%></a></li>    
+    <% } %>
+    </ul>
+<div>
+<%- include footer.ejs %>
