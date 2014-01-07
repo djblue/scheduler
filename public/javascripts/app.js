@@ -181,13 +181,105 @@ app.controller("StaffController",function ($scope, $http) {
 });
 
 app.controller('searchController', function ($scope, $http) {
-     
-    $http.get('/api/staff').success(function (data) {
-        $scope.data = data;
+    
+    $http.get('/api/subjects').success(function (data) {
+        $scope.subjects = data;
+    });
+    
+    $http.get('/api/courses').success(function (data) {
+        $scope.coursesReq = data;
     });
 
-    $scope.$watch('search', function () {
+    $http.get('/api/staff').success(function(data) {
+        $scope.staffReq = data;
+        $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
+            return item.location.title; 
+        });
+        console.log(data);
     });
+
+    // append everything to get it ready for html rendering.
+    $scope.table = {
+        monday:     [],
+        tuesday:    [],
+        wednesday:  [],
+        thursday:   [],
+        friday:     []
+    };
+
+    var j = 9;
+    for(day in $scope.table){
+        $scope.times = [];
+        for (var i = 0; i <= 20; i++) {
+            var time;
+            // hit noon
+            if (j % 12 === 0) {
+                time = "12"
+            } else {
+                time = '' + j % 12;
+            }
+
+            // full hour
+            if (i % 2 === 0) {
+                time += ':00'
+            // half hour
+            } else {
+                 time += ':30'
+                j++;
+            }
+
+            if (i != 0) {
+                var temp = function (){
+                    if(i % 5 != 0) return "available";
+                    return "unavailable";
+                };
+
+                $scope.times[i-1] += '-' + time;
+                // populate table row
+                $scope.table[day].push( { 
+                    "time" : $scope.times[i-1], 
+                    "availability": temp()
+                });
+            }
+            if (i != 20) {
+                $scope.times[i] = time;
+            }
+        } 
+    }
+    
+    console.log($scope.table);
+    
+    $scope.number;
+
+    $scope.$watchCollection('[prefix, number]', function(){
+        if($scope.prefix != undefined){
+            $scope.courses = _.filter($scope.coursesReq, function (courses) { 
+                return courses.subject._id === $scope.prefix._id;
+            });
+
+            $scope.staff = [];
+
+            for (var i = 0; i < $scope.staffReq.length; i++){
+                // if user select just a subject
+                if($scope.number == undefined){
+                if(_.find($scope.staffReq[i].courses, function(course){return course.subject === $scope.prefix._id})){
+                    $scope.staff.push($scope.staffReq[i]);
+                }
+                }else{  // if user select a course number
+                if(_.find($scope.staffReq[i].courses, function(course){return (course.number === $scope.number.number && course.subject === $scope.prefix._id)})){
+                    $scope.staff.push($scope.staffReq[i]);
+                }   
+                }
+                for(day in $scope.staffReq.schedule){
+
+                }
+            }
+        }
+        // console.log($scope.staff);
+        // console.log(undefined | 1);
+    });
+
+    $scope.$watch('prefix', function() {$scope.number = undefined});
 
 });
 

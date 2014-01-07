@@ -1,5 +1,29 @@
 <div class="container" ng-controller="searchController" class="search">
     <h1>Search</h1>
-    <input type="text" ng-model="search" placeholder="search by class"/>
-    <div ng-repeat="find in results" class="search-result"></div>
+    <!--Prefix-->
+    <select ng-model="prefix" placeholder="Prefix" ng-options="m.prefix for m in subjects"></select>
+    <!--Course #-->
+    <select ng-model="number" placeholder="Number" ng-options="m.number for m in courses"></select>
+    <!--Tutor-->
+    <select ng-model="tutor" placeholder="Tutorss" ng-options="m.name for m in staff"></select>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Course</th>
+                <th>Tutors</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="t in table.monday">
+                <td>{{t.time}}</td>
+                <td class = {{t.availability}}>{{prefix.prefix}} {{number.number}}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
 </div>
