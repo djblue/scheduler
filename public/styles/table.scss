@@ -15,8 +15,18 @@ table {
         padding:10px;
     }
 
+    td.available {
+        padding:10px;
+        background: $green;
+    }
+    td.unavailable{
+        padding:10px;
+        background: $light;
+    }
+
     tr {
         text-align: center;
+        border-bottom: 1px solid $light;
     }
 
     tr:hover {
