@@ -3,6 +3,9 @@ var app = angular.module('app', ['ngRoute', 'app.directives'])
     function ($routeProvider) {
         $routeProvider.
             when('/', {
+                templateUrl: 'partials/locations.html'
+            }).
+            when('/schedule/:id', {
                 templateUrl: 'partials/schedule.html'
             }).
             when('/users', {
@@ -57,7 +60,7 @@ app.service('userService', function ($http, $rootScope) {
     };
 });
 
-app.controller('schedulerController', function ($scope, $http) {
+app.controller('schedulerController', function ($routeParams, $scope, $http) {
 
     $scope.days = [
         'monday',
@@ -84,9 +87,14 @@ app.controller('schedulerController', function ($scope, $http) {
             data[i].schedule.thursday = Array(20);
             data[i].schedule.friday = Array(20);
         }
-        $scope.majors = _.groupBy(data, function (obj) {
-            return obj.major.title;
-        });
+        $scope.majors = _.chain(data)
+            .filter(function (obj) {
+                return obj.location._id === $routeParams.id;
+            })
+            .groupBy(function (obj) {
+                return obj.major.prefix;
+            })
+            .value();
         var majors = Object.keys($scope.majors);
         for (var i = 0; i < majors.length; i++) {
             $scope.sums[majors[i]] = {
@@ -178,6 +186,12 @@ app.controller("StaffController",function ($scope, $http) {
         contact.email = '';
         contact.major = '';
     };
+});
+
+app.controller('locationController', function ($scope, $http) {
+    $http.get('/api/locations').success(function (data) {
+        $scope.locations = data;
+    });
 });
 
 app.controller('searchController', function ($scope, $http) {
