@@ -122,7 +122,7 @@ var updateMany = function (req, res) {
                 }
             });
     });
-    log.write('Many staff were updated.');
+    log.write('Staff Updated','Many staff were updated.');
     res.json(200);
 };
 
