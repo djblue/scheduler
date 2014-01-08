@@ -113,6 +113,19 @@ var remove = function (req, res) {
     }); 
 };
 
+var updateMany = function (req, res) {
+    _.each(req.body, function (staff) {
+        Staff.findByIdAndUpdate(staff._id, _.omit(staff, '_id'))
+            .exec(function (err) {
+                if (err) {
+                    res.json(500, err);
+                }
+            });
+    });
+    log.write('Many staff were updated.');
+    res.json(200);
+};
+
 var update = function (req, res) { 
     Staff.findByIdAndUpdate(req.params.id, req.body)
         .exec(function (err, staff) {
@@ -221,6 +234,7 @@ var submitHours = function (req, res) {
 exports.setup = function (app) {
     app.get('/api/staff', list);
     app.post('/api/staff', add);
+    app.put('/api/staff', updateMany);
     app.put('/api/staff/:id', update);
     app.delete('/api/staff/:id', remove);
 

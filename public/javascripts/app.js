@@ -79,22 +79,38 @@ app.controller('schedulerController', function ($routeParams, $scope, $http) {
         friday: Array(20)
     };
 
+    $scope.staff = [];
+
+    $scope.saveAll = function () {
+        var schedule = _.map($scope.staff, function (member) {
+            return {
+                _id: member._id,
+                schedule: member.schedule
+            };
+        });
+        console.log(schedule);
+        $http.put('/api/staff', schedule);
+    };
+
     $http.get('/api/staff').success(function (data) {
         for (var i = 0; i < data.length; i++) {
-            data[i].schedule.monday = Array(20);
-            data[i].schedule.tuesday = Array(20);
-            data[i].schedule.wednesday = Array(20);
-            data[i].schedule.thursday = Array(20);
-            data[i].schedule.friday = Array(20);
+            if (data[i].schedule.monday.length === 0) {
+                data[i].schedule.monday = Array(20);
+                data[i].schedule.tuesday = Array(20);
+                data[i].schedule.wednesday = Array(20);
+                data[i].schedule.thursday = Array(20);
+                data[i].schedule.friday = Array(20);
+            }
+            data[i].total = _.reduce(_.flatten(_.values(data[i].schedule)), function (memo, num) {
+                return memo + num;
+            }, 0);
         }
-        $scope.majors = _.chain(data)
-            .filter(function (obj) {
-                return obj.location._id === $routeParams.id;
-            })
-            .groupBy(function (obj) {
+        $scope.staff = _.filter(data, function (obj) {
+            return obj.location._id === $routeParams.id;
+        })
+        $scope.majors = _.groupBy($scope.staff, function (obj) {
                 return obj.major.prefix;
-            })
-            .value();
+        });
         var majors = Object.keys($scope.majors);
         for (var i = 0; i < majors.length; i++) {
             $scope.sums[majors[i]] = {

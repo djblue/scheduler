@@ -24,6 +24,7 @@ angular.module('app.directives', [])
             // is the item masked out?
             if (!!$scope.mask && !$scope.mask[i]) {
                 $scope.status[i] = 'disabled';
+                $scope.list[i] = 0;
             } else {
                 if (!$scope.list[i]) {
                     $scope.list[i] = 0;
@@ -37,15 +38,24 @@ angular.module('app.directives', [])
         // initialize partial sums
         if (!!$scope.inc1) {
             for (var i = 0; i < $scope.inc1.length; i++) {
-                $scope.inc1[i] = 0;
+                if (!$scope.inc1[i]) {
+                    $scope.inc1[i] = 0;
+                }
+                if ($scope.list[i] === 1) {
+                    $scope.inc1[i]++;
+                }
             }
         }
         if (!!$scope.inc2) {
             for (var i = 0; i < $scope.inc2.length; i++) {
-                $scope.inc2[i] = 0;
+                if (!$scope.inc2[i]) {
+                    $scope.inc2[i] = 0;
+                }
+                if ($scope.list[i] === 1) {
+                    $scope.inc2[i]++;
+                }
             }
         }
-        if (!$scope.acc) { $scope.acc = 0; }
 
         $scope.check = function (i) {
             if ($scope.status[i] !== 'disabled') {
