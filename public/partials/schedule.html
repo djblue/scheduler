@@ -17,7 +17,6 @@
     }
     div[class*=column] {
         display: inline-block;
-        margin: 0px 5px;
         line-height: 100%;
     }
     .check-list 
@@ -26,11 +25,14 @@
         padding:0 10px;
     }
     .major-column {
+        border-left: 1px #191818 solid;
+        padding: 0px 5px;
+    }
+    .major-column:last-child {
+        border-right: 1px #191818 solid;
     }
     .staff-column {
         width: 76px;
-    }
-    .major-column {
     }
     .partial-sum-column {
         //color: #191818;
@@ -45,11 +47,15 @@
         height: 48px;
         text-align: center;
     }
-    .names-row {
+    .name-row {
         display: block;
-        height: 48px;
+        height: 60px;
         text-align: center;
         vertical-align: text-top;
+        overflow:hidden;
+    }
+    .name-row a {
+        font-size: 12px;
     }
     .max-hours-row {
         display: block;
@@ -69,13 +75,19 @@
     .body-row {
         margin-top: 40px;
     }
+    #save {
+        position: fixed;
+        bottom: 20px;
+        left: 31.5px;
+        z-index: 10001;
+    }
 
 </style>
 
 <div ng-controller="schedulerController" class="scheduler">
 
     <div>
-        <button ng-click="saveAll()">save</button>
+        <button id="save" ng-click="saveAll()">save</button>
     </div>
 
     <div class="time-column" >
@@ -100,6 +112,7 @@
         </div>
     </div>
 
+    <div class="column">
     <div ng-repeat="(major, staff) in majors" class="major-column">
 
         <!-- Header content -->
@@ -134,6 +147,7 @@
             </div>
         </div>
 
+    </div>
     </div>
 
     <div class="sum-column">
