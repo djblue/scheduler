@@ -1,5 +1,17 @@
 angular.module('app.directives', [])
 
+.directive('toggle', function () {
+    return {
+        restrict: 'AE',
+        link: function (scope, element, attrs) {
+            element.find('.toggle-button').click(function () {
+                console.log(this);
+                element.find('.toggle-content').slideToggle();
+            });
+        }
+    }
+})
+
 .directive('multipleSelect', function ($timeout) {
     return {
         restrict: 'A', // matches using attributes

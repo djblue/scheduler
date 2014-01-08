@@ -27,17 +27,18 @@
         padding:0 10px;
     }
     .major-column {
-        border-left: 1px #191818 solid;
-        padding: 0px 5px;
+        border: 1px #191818 solid;
+        margin: 0px 5px;
     }
     .major-column:last-child {
-        border-right: 1px #191818 solid;
+        /*border-right: 1px #191818 solid;*/
     }
     .staff-column {
         width: 76px;
     }
     .partial-sum-column {
         //color: #191818;
+        padding: 0 5px;
     }
     .sum-column {
         color: #0e90d2;
@@ -46,8 +47,15 @@
     div[class*=row] {
     }
     .majors-row {
-        height: 48px;
+        //height: 48px;
         text-align: center;
+        line-height: 36px;
+    }
+    .majors-row h1 {
+        background: #191818;
+        color: white;
+        padding: 5px;
+        cursor: pointer;
     }
     .name-row {
         display: block;
@@ -115,13 +123,13 @@
     </div>
 
     <div class="column">
-    <div ng-repeat="(major, staff) in majors" class="major-column">
+    <div toggle ng-repeat="(major, staff) in majors" class="major-column">
 
         <!-- Header content -->
-        <div class="majors-row"><h1>{{ major }}</h1></div>
+        <div class="majors-row toggle-button"><h1>{{ major }}</h1></div>
 
         <!-- Run through the staff members. -->
-        <div ng-repeat="person in staff" class="staff-column">
+        <div ng-repeat="person in staff" class="staff-column toggle-content">
 
             <div class="name-row"><h2><a href="/staff/{{person._id}}">{{ person.name }}</a></h2></div>
             <div class="max-hours-row"><h3>{{ person.max }}</h3></div>
