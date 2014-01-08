@@ -39,7 +39,7 @@ var Staff = exports.Staff = mongoose.model('Staff', {
 var list = function (req, res) {
     Staff.find()
         .populate('major')
-        //.populate('courses')
+        .populate('courses')
         .populate('location')
         .exec(function (err, staff) {
             if (err) {

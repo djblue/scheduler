@@ -20,7 +20,9 @@
             <tr ng-repeat="t in table.monday">
                 <td>{{t.time}}</td>
                 <td class = {{t.availability}}>{{prefix.prefix}} {{number.number}}</td>
-                <td></td>
+                <td> <ul>
+                    <li ng-repeat="tutor in t.tutors">{{tutor}}</li>
+                </ul></td>
                 <td></td>
             </tr>
         </tbody>
