@@ -231,6 +231,22 @@ var submitHours = function (req, res) {
         });
 };
 
+var schedule = function (req, res) {
+    Staff.find({location: req.params.location})
+        .populate('major') 
+        .exec(function (err, staff) {
+
+            if (err) {
+                res.end(500);
+            }
+
+            res.render('staffSchedule', {
+                title: 'Staff Schedule',
+                staff: JSON.stringify(_.sortBy(staff, 'name'))
+            });
+    });
+}
+
 exports.setup = function (app) {
     app.get('/api/staff', list);
     app.post('/api/staff', add);
@@ -241,6 +257,7 @@ exports.setup = function (app) {
     //app.post('/api/email/:id', requestHoursById);
 
     app.get('/staff', listStaff);
+    app.get('/schedule/:location', schedule);
     app.get('/staff/:id', getHours);
     app.post('/staff/:id', submitHours);
 };
