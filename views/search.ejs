@@ -1,0 +1,211 @@
+<doctype HTML>
+<html ng-app="app">
+<head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"0>
+    <link rel="stylesheet" type="text/css" href="/styles/main.css">
+<script src="/bower_components/underscore/underscore-min.js"/></script>
+<script src="/bower_components/jquery/jquery.min.js"/></script>
+<script src="/bower_components/angular/angular.min.js"></script>
+<script>
+
+var app = angular.module('app', []);
+
+app.controller('searchController', function ($scope, $http) {
+
+    
+    $http.get('/api/subjects').success(function (data) {
+        $scope.subjects = data;
+    });
+    
+    $http.get('/api/staff').success(function(data) {
+        $scope.staffReq = data;
+        $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
+            return item.location.title; 
+        });
+        // console.log(data);
+    });
+
+  $scope.number;
+
+    $scope.$watchCollection('[prefix, number]', function(){
+       
+       $scope.coursesReq = [];
+
+        // get courses that have 1 > tutors 
+        _.each($scope.staffReq, function (courses) {
+            _.each(courses.courses, function (course) {
+                course['course'] = course.number + "\t" + course.title;
+                if(_.find($scope.coursesReq, function(c){return c.title == course.title}) === undefined)
+                    $scope.coursesReq.push(course);         
+            });
+        });
+
+        // sort courses
+        $scope.coursesReq = _.sortBy($scope.coursesReq, function(currentObject) { return currentObject.number; });
+
+
+        // append everything to get it ready for html rendering.
+        $scope.week = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday' ];
+
+        $scope.table = {
+            monday:     [],
+            tuesday:    [],
+            wednesday:  [],
+            thursday:   [],
+            friday:     []
+        };
+
+        for(day in $scope.table){
+            var j = 9;
+            $scope.times = [];
+            for (var i = 0; i <= 20; i++) {
+                var time;
+                // hit noon
+                if (j % 12 === 0) {
+                    time = "12"
+                } else {
+                    time = '' + j % 12;
+                }
+
+                // full hour
+                if (i % 2 === 0) {
+                    time += ':00'
+                // half hour
+                } else {
+                     time += ':30'
+                    j++;
+                }
+
+                if (i != 0) {
+                    // var temp = function (){
+                    //     if(i % 5 != 0) return "available";
+                    //     return "unavailable";
+                    // };
+
+                    $scope.times[i-1] += '-' + time;
+                    // populate table row
+                    $scope.table[day].push( { 
+                        "id": i-1,
+                        "time" : $scope.times[i-1].split('-').join('\n'), 
+                        "tutors" : []
+                        //"availability": temp()
+                    });
+                }
+                if (i != 20) {
+                    $scope.times[i] = time;
+                }
+            } 
+        }
+
+        $scope.courseTitle = '';
+
+        if($scope.prefix != undefined){
+            $scope.courses = _.filter(_.uniq($scope.coursesReq), function (courses) { 
+                return courses.subject === $scope.prefix._id;
+            });
+
+            $scope.staff = [];
+
+            for (var i = 0; i < $scope.staffReq.length; i++){
+                // if user select just a subject
+                if($scope.number == undefined){
+                if(_.find($scope.staffReq[i].courses, function(course){return course.subject === $scope.prefix._id})){
+                    $scope.staff.push($scope.staffReq[i]);
+                    for(day in $scope.staffReq[i].schedule){
+                    for(var obj = 0; obj < $scope.table[day].length;obj++){
+                        //$scope.table[day][obj]['tutors'] = [];
+                        if($scope.staffReq[i].schedule[day][obj] === 1 ){
+                            $scope.table[day][obj]['schedule'] = "available";
+                            $scope.table[day][obj]['tutors'].push($scope.staffReq[i].name);
+                        }else if ($scope.staffReq[i].schedule[day][obj] === 0 &&
+                            $scope.table[day][obj]['schedule'] === "available"){
+                            $scope.table[day][obj]['schedule'] = "available";
+                        }else{
+                            $scope.table[day][obj]['schedule'] = "unavailable";
+                        }
+                    }
+                }
+                }
+                }else{  // if user select a course number
+                if(_.find($scope.staffReq[i].courses, function(course){return (course.number === $scope.number.number && course.subject === $scope.prefix._id)})){
+                    $scope.courseTitle = $scope.number.title;
+                    $scope.staff.push($scope.staffReq[i]);
+                    for(day in $scope.staffReq[i].schedule){
+                    for(var obj = 0; obj < $scope.table[day].length;obj++){
+                        //$scope.table[day][obj]['tutors'] = [];
+                        if($scope.staffReq[i].schedule[day][obj] === 1 ){
+                            $scope.table[day][obj]['schedule'] = "available";
+                            $scope.table[day][obj]['tutors'].push($scope.staffReq[i].name);
+                        }else if ($scope.staffReq[i].schedule[day][obj] === 0 &&
+                            $scope.table[day][obj]['schedule'] === "available"){
+                            $scope.table[day][obj]['schedule'] = "available";
+                        }else{
+                            $scope.table[day][obj]['schedule'] = "unavailable";
+                        }
+                    }
+                }
+                }   
+                }
+            }
+        }
+    });
+
+    $scope.$watch('prefix', function() {$scope.number = undefined});
+
+    $scope.showTutor = function(hour) {
+        console.log(hour);
+        $scope.tutors = hour;
+    };
+});
+</script>
+</head>
+<body>
+
+<div class="container" ng-controller="searchController" class="search">
+    <h1>Search</h1>
+    <!--Prefix-->
+    <select ng-model="prefix" placeholder="Prefix" ng-options="m.prefix for m in subjects"></select>
+    <!--Course #-->
+    <select ng-model="number" placeholder="Number" ng-options="m.course for m in courses"></select>
+    <!--Tutor
+    <select ng-model="tutor" placeholder="Tutors" ng-options="m.name for m in staff"></select>-->
+    
+    <h4>{{prefix.prefix}} {{number.number}} {{courseTitle}}</h4>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th  style="font-size: 10px;" ng-repeat="hours in table.monday">{{hours.time}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="day in week">
+                <td style="text-transform: capitalize;">{{ day }}</td>
+                <td class="tutors-{{ hour.tutors.length > 0 }}" ng-repeat="hour in table[day]" ng-click="showTutor(hour)">{{hour.tutors.length}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        <table>
+        <thead>
+            <tr>
+                <th>Tutors</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><ol>
+                    <li ng-repeat= "tutor in tutors.tutors">{{tutor}}</li>
+                </ol></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+
+</body></html>

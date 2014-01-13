@@ -15,11 +15,14 @@ table {
         padding:10px;
     }
 
-    td.available {
+    td.tutors-true {
         padding:10px;
         background: $green;
     }
-    td.unavailable{
+    td.tutors-true:hover {
+        background: $blue;
+    }
+    td.tutors-false{
         padding:10px;
         background: $light;
     }

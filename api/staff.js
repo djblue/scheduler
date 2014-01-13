@@ -231,6 +231,12 @@ var submitHours = function (req, res) {
         });
 };
 
+var search = function (req, res) {
+    res.render('search', {
+        title: 'search'
+    });
+};
+
 exports.setup = function (app) {
     app.get('/api/staff', list);
     app.post('/api/staff', add);
@@ -243,4 +249,5 @@ exports.setup = function (app) {
     app.get('/staff', listStaff);
     app.get('/staff/:id', getHours);
     app.post('/staff/:id', submitHours);
+    app.get('/search', search);
 };
