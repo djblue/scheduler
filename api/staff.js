@@ -186,7 +186,7 @@ var listStaff = function (req, res) {
     });
 };
 
-var getHours = function (req, res) {
+var getHours = function (req, res, next) {
 
     Staff.findById(req.params.id)
         .populate('major')
@@ -210,15 +210,44 @@ var getHours = function (req, res) {
                         });
                 }
             } else {
-                res.render('error', {
-                    message: 'Sorry. You are unable to edit your hours at the current time'
-                });
+                next();
             }
     });
 
 };
 
+function and (a, b) {
+    var result = [];
+
+    for (var i = 0; i < a.length; i++)  {
+        result[i] = Number(Boolean(b[i]) && Boolean(a[i]));
+    }
+
+    return result;
+};
+
 var submitHours = function (req, res) {
+
+   var a = _.clone(req.body.availability);
+
+    // ensure that schedule is consistent with availability
+    if (!!a) {
+        Staff.findById(req.params.id)
+            .exec(function (err, staff) {
+                staff.availability = a;
+                staff.schedule = {
+                    monday: and(a.monday, staff.schedule.monday),
+                    tuesday: and(a.tuesday, staff.schedule.tuesday),
+                    wednesday: and(a.wednesday, staff.schedule.wednesday),
+                    thursday: and(a.thursday, staff.schedule.thursday),
+                    friday: and(a.friday, staff.schedule.friday)
+                }
+                console.log(staff.schedule);
+                staff.save();
+            });
+        req.body = _.omit(req.body, 'availability');
+    }
+
     Staff.findByIdAndUpdate(req.params.id, req.body)
         .exec(function (err, staff) {
             if (err) {
@@ -237,6 +266,22 @@ var search = function (req, res) {
     });
 };
 
+var schedule = function (req, res) {
+    Staff.find({location: req.params.location})
+        .populate('major') 
+        .exec(function (err, staff) {
+
+            if (err) {
+                res.end(500);
+            }
+
+            res.render('staffSchedule', {
+                title: 'Staff Schedule',
+                staff: JSON.stringify(_.sortBy(staff, 'name'))
+            });
+    });
+}
+
 exports.setup = function (app) {
     app.get('/api/staff', list);
     app.post('/api/staff', add);
@@ -247,6 +292,7 @@ exports.setup = function (app) {
     //app.post('/api/email/:id', requestHoursById);
 
     app.get('/staff', listStaff);
+    app.get('/schedule/:location', schedule);
     app.get('/staff/:id', getHours);
     app.post('/staff/:id', submitHours);
     app.get('/search', search);

@@ -1,0 +1,190 @@
+<%- include header.ejs %>
+<script src="/bower_components/underscore/underscore-min.js"/></script>
+<script src="/bower_components/jquery/jquery.min.js"/></script>
+<script src="/bower_components/angular/angular.js"></script>
+<script src="/javascripts/directives.js"></script>
+<script>
+var app = angular.module('app', ['app.directives'])
+
+app.controller('schedulerController', function ($scope) {
+
+    $scope.days = [
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday'
+    ];
+    
+    $scope.sums = {};
+    $scope.total = {
+        monday: Array(20),
+        tuesday: Array(20),
+        wednesday: Array(20),
+        thursday: Array(20),
+        friday: Array(20)
+    };
+
+    $scope.staff = [];
+
+    var data = <%- staff %>;
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].schedule.monday.length === 0) {
+            data[i].schedule.monday = Array(20);
+            data[i].schedule.tuesday = Array(20);
+            data[i].schedule.wednesday = Array(20);
+            data[i].schedule.thursday = Array(20);
+            data[i].schedule.friday = Array(20);
+        }
+        data[i].total = _.reduce(_.flatten(_.values(data[i].schedule)), function (memo, num) {
+            return memo + num;
+        }, 0);
+    }
+    $scope.majors = _.groupBy(data, function (obj) {
+            return obj.major.prefix;
+    });
+    var majors = Object.keys($scope.majors);
+    for (var i = 0; i < majors.length; i++) {
+        $scope.sums[majors[i]] = {
+            monday: Array(20),
+            tuesday: Array(20),
+            wednesday: Array(20),
+            thursday: Array(20),
+            friday: Array(20)
+        }
+    }
+});
+</script>
+<style>
+    /*
+        This CSS is for positioning the scheduling table;
+        be careful when making changes. You might be 'accidently'
+        do something you don't intend to do.
+     */ 
+     span[class*=check]:hover {
+        cursor: default;
+     }
+     .check-false:hover {
+        opacity: 0.5;
+     }
+     body {
+        padding: 0;
+        text-align: center;
+        color: #777;
+     }
+    .scheduler {
+        display: inline-block;
+        padding: 20px;
+        white-space: nowrap;
+    }
+    .scheduler  div {
+        white-space: normal;
+    }
+    div[class*=column] {
+        display: inline-block;
+        line-height: 100%;
+        white-space: nowrap;
+    }
+    .check-list 
+    {
+        text-align: center;
+        padding:0 1px;
+    }
+    .major-column {
+        border: 1px #191818 solid;
+        margin: 0px 5px;
+    }
+    .major-column:last-child {
+        /*border-right: 1px #191818 solid;*/
+    }
+    .staff-column {
+        width: 48px;
+    }
+    div[class*=row] {
+    }
+    .majors-row {
+        text-align: center;
+        line-height: 36px;
+    }
+    .majors-row h1 {
+        background: #191818;
+        color: white;
+        padding: 5px;
+    }
+    .name-row {
+        display: block;
+        height: 60px;
+        text-align: center;
+        vertical-align: text-top;
+        overflow:hidden;
+    }
+    .name-row a {
+        font-size: 10px;
+    }
+    .max-hours-row {
+        display: block;
+        height: 24px;
+        text-align: center;
+    }
+    .current-hours-row {
+        text-align: center;
+        height: 20px;
+    }
+    .current-hours-row h3 {
+        margin: 0 10px;
+        color: rgb(255, 255, 255);
+        background: #0e90d2;
+        border-radius: 5px;
+    }
+    .body-row {
+        margin-top: 40px;
+    }
+</style>
+
+<div ng-controller="schedulerController" class="scheduler">
+    <div class="time-column" >
+        <!-- Header content -->
+        <div class="majors-row"></div>
+        <div class="names-row"></div>
+        <div class="max-hours-row"></div>
+        <div class="current-hours-row"></div>
+        <div class="body-row" count="days" time-list></div>
+    </div>
+
+    <div class="column">
+    <div ng-repeat="(major, staff) in majors" class="major-column">
+
+        <!-- Header content -->
+        <div class="majors-row"><h1>{{ major }}</h1></div>
+
+        <!-- Run through the staff members. -->
+        <div ng-repeat="person in staff" class="staff-column">
+
+            <div class="name-row"><h2><a>{{ person.name }}</a></h2></div>
+            <div class="max-hours-row"><h3>{{ person.max }}</h3></div>
+            <div class="current-hours-row"><h3>{{ .5*person.total }}</h3></div>
+
+            <div class="body-row" ng-repeat="day in days"> 
+                <div mask="person.availability[day]" 
+                     list="person.schedule[day]" 
+                     inc1="total[day]"
+                     inc2="sums[major][day]"
+                     acc="person.total"
+                     check-list-read-only>
+                </div>
+            </div>
+        </div> 
+    </div>
+    </div>
+
+    <div class="time-column" >
+        <!-- Header content -->
+        <div class="majors-row"></div>
+        <div class="names-row"></div>
+        <div class="max-hours-row"></div>
+        <div class="current-hours-row"></div>
+        <div class="body-row" count="days" time-list></div>
+    </div>
+
+</div>
+<%- include footer.ejs %>

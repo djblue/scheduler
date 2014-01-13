@@ -107,6 +107,70 @@ angular.module('app.directives', [])
 
 })
 
+.directive('checkListReadOnly', function () {
+
+    function checkController ($scope) {
+
+        $scope.status = Array($scope.list.length);
+
+        // initialize the check list
+        for (var i = 0; i < $scope.list.length; i++) {
+            // is the item masked out?
+            if (!!$scope.mask && !$scope.mask[i]) {
+                $scope.status[i] = 'disabled';
+                $scope.list[i] = 0;
+            } else {
+                if (!$scope.list[i]) {
+                    $scope.list[i] = 0;
+                    $scope.status[i] = 'false';
+                } else {
+                    $scope.status[i] = 'true';
+                }
+            }
+        }
+
+        // initialize partial sums
+        if (!!$scope.inc1) {
+            for (var i = 0; i < $scope.inc1.length; i++) {
+                if (!$scope.inc1[i]) {
+                    $scope.inc1[i] = 0;
+                }
+                if ($scope.list[i] === 1) {
+                    $scope.inc1[i]++;
+                }
+            }
+        }
+        if (!!$scope.inc2) {
+            for (var i = 0; i < $scope.inc2.length; i++) {
+                if (!$scope.inc2[i]) {
+                    $scope.inc2[i] = 0;
+                }
+                if ($scope.list[i] === 1) {
+                    $scope.inc2[i]++;
+                }
+            }
+        }
+    }
+
+    return {
+        restrict: 'AE', // matches using attributes and elements name
+        //replace: true,
+        transclude: true,
+        scope: {
+            list: '=',
+            mask: '=',
+            acc: '=',
+            inc1: '=',
+            inc2: '=' 
+        },
+        link: function (scope, element, attrs) {
+        },
+        templateUrl: '/partials/checkList.html',
+        controller: checkController
+    }
+
+})
+
 .directive('timeList', function () {
 
     function timeController($scope) {
