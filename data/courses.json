@@ -507,43 +507,43 @@
     { 
         "_id": "72",
         "subject": "11", 
-        "number":"240",  
-        "title" :"Introduction to Programming Language",
-        "location":"1"
-    },
-    { 
-        "_id": "73",
-        "subject": "11", 
         "number":"310",  
         "title" :"Data Structures and Algorithms",
         "location":"1"
     },
     { 
-        "_id": "74",
+        "_id": "73",
         "subject": "11", 
         "number":"340",  
         "title" :"Principles of Programming Languages",
         "location":"1"
     },
     { 
-        "_id": "75",
+        "_id": "74",
         "subject": "11", 
         "number":"360",  
         "title" :"Intro to Software Engineering",
         "location":"1"
     },
     {
-        "_id": "76",
+        "_id": "75",
         "subject": "9",
         "number": "380",
         "title" : "Probability & Statistics Engr Problem Solving",
         "location": "1"
     },
     {
-        "_id": "77",
+        "_id": "76",
         "subject": "5",
         "number": "243",
         "title" : "Discrete Mathematical Structures",
         "location": "1"
+    },
+    { 
+        "_id": "77",
+        "subject": "11", 
+        "number":"240",  
+        "title" :"Introduction to Programming Language",
+        "location":"1"
     }
 ]
