@@ -284,10 +284,10 @@ var schedule = function (req, res) {
 
 exports.setup = function (app) {
     app.get('/api/staff', list);
-    app.post('/api/staff', add);
-    app.put('/api/staff', updateMany);
-    app.put('/api/staff/:id', update);
-    app.delete('/api/staff/:id', remove);
+    app.post('/api/staff', auth.isAuthenticated, add);
+    app.put('/api/staff', auth.isAuthenticated, updateMany);
+    app.put('/api/staff/:id', auth.isAuthenticated, update);
+    app.delete('/api/staff/:id', auth.isAuthenticated, remove);
 
     //app.post('/api/email/:id', requestHoursById);
 
