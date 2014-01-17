@@ -1,0 +1,54 @@
+.search {
+    margin: 0 auto;
+    max-width: 560px;
+
+    .left {
+        min-width: 100px;
+        text-align: left;
+    }
+}
+
+.search-table  {
+
+    th {
+        height: 88px;
+    }
+
+    th, td {
+        border: 1px black solid;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    td div {
+        width: 76px;
+        margin: 1px 0;
+    }
+       
+    .tutors-true {
+        background: $green;
+    }
+
+    .tutors-true:hover {
+        background: $blue;
+    }
+}
+
+.pre {
+    display: inline-block;
+    width: 12%;
+}
+.course {
+    display: inline-block;
+    width: 80%;
+}
+
+.rot div {
+    -webkit-transform: rotate(-75deg);
+    -moz-transform: rotate(-75deg);
+    -ms-transform: rotate(-75deg);
+    -o-transform: rotate(-75deg);
+}
+

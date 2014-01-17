@@ -1,8 +1,12 @@
-table {
+table { 
+    border-collapse:collapse; 
+    margin: 0 auto;
+}
+
+.table {
 
     width: 100%;
-    margin: 20px 0;
-    border-collapse:collapse;
+    margin: 20px ;
 
     th {
         color: #999;
@@ -15,18 +19,6 @@ table {
         padding:10px;
     }
 
-    td.tutors-true {
-        padding:0;
-        background: $green;
-    }
-    td.tutors-true:hover {
-        background: $blue;
-    }
-    td.tutors-false{
-        padding:0;
-        background: $light;
-    }
-
     tr {
         text-align: center;
         border-bottom: 1px solid $light;
@@ -36,4 +28,3 @@ table {
         background: $light;
     }
 }
-

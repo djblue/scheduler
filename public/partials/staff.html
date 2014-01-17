@@ -1,6 +1,6 @@
 <div class="container" ng-controller="StaffController">
     <h1>Manage Staff</h1>
-    <table>
+    <table class="table">
         <!--Add staff-->
         <tr>
             <td><input type="text" placeholder="Name" ng-model="name"/></td>
@@ -16,7 +16,7 @@
     </table>
 
     <div>
-        <table>
+        <table class="table">
             <tr>
                 <td><button class ="btn-green" ng-click="allEditable()">Send ALL</button></td>
                 <td><button class ="btn-green" ng-click="allEditable()">{{bt1}}</button></td>
@@ -26,7 +26,7 @@
 
     <div ng-repeat="(location, contacts) in staffByLoc">
         <h2>{{ location }}</h2>
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -50,7 +50,8 @@
                         ng-click="removeContact(contact)">Remove</button></td>
                     <td><button class ="btn-green"
                         ng-click="clearContact(contact)">Email</button></td>
-                    <td><input type = "checkbox" ng-checked = "contact.editable" ng-click="update(contact)"></td>
+                    <td><input type="checkbox" ng-checked="contact.editable" 
+                         ng-click="update(contact)"></td>
                 </tr>
             </tbody>
         </table>
