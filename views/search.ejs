@@ -6,16 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="content-type" content="text/html; charset=utf-8"0>
     <link rel="stylesheet" type="text/css" href="/styles/main.css">
-<script src="/bower_components/underscore/underscore-min.js"/></script>
-<script src="/bower_components/jquery/jquery.min.js"/></script>
-<script src="/bower_components/angular/angular.min.js"></script>
-<script>
+    <script src="/bower_components/underscore/underscore-min.js"/></script>
+    <script src="/bower_components/jquery/jquery.min.js"/></script>
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script>
 
 var app = angular.module('app', []);
 
 app.controller('searchController', function ($scope, $http) {
-
     
+    $scope.show1 = false;
+    $scope.show2 = false;
+
     $http.get('/api/subjects').success(function (data) {
         $scope.subjects = data;
     });
@@ -28,24 +30,24 @@ app.controller('searchController', function ($scope, $http) {
         // console.log(data);
     });
 
-  $scope.number;
+    $scope.number;
 
     $scope.$watchCollection('[prefix, number]', function(){
        
-       $scope.coursesReq = [];
+        $scope.coursesReq = [];
 
         // get courses that have 1 > tutors 
         _.each($scope.staffReq, function (courses) {
             _.each(courses.courses, function (course) {
                 course['course'] = course.number + "\t" + course.title;
                 if(_.find($scope.coursesReq, function(c){return c.title == course.title}) === undefined)
+                // if(_.find($scope.coursesReq, function(c){return c._id == course._id}) === undefined)
                     $scope.coursesReq.push(course);         
             });
         });
 
         // sort courses
         $scope.coursesReq = _.sortBy($scope.coursesReq, function(currentObject) { return currentObject.number; });
-
 
         // append everything to get it ready for html rendering.
         $scope.week = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday' ];
@@ -103,6 +105,7 @@ app.controller('searchController', function ($scope, $http) {
         $scope.courseTitle = '';
 
         if($scope.prefix != undefined){
+            $scope.show1 = true;
             $scope.courses = _.filter(_.uniq($scope.coursesReq), function (courses) { 
                 return courses.subject === $scope.prefix._id;
             });
@@ -119,7 +122,10 @@ app.controller('searchController', function ($scope, $http) {
                         //$scope.table[day][obj]['tutors'] = [];
                         if($scope.staffReq[i].schedule[day][obj] === 1 ){
                             $scope.table[day][obj]['schedule'] = "available";
-                            $scope.table[day][obj]['tutors'].push($scope.staffReq[i].name);
+                            $scope.table[day][obj]['tutors'].push({
+                                name: $scope.staffReq[i].name,
+                                location: $scope.staffReq[i].location
+                            });
                         }else if ($scope.staffReq[i].schedule[day][obj] === 0 &&
                             $scope.table[day][obj]['schedule'] === "available"){
                             $scope.table[day][obj]['schedule'] = "available";
@@ -138,7 +144,10 @@ app.controller('searchController', function ($scope, $http) {
                         //$scope.table[day][obj]['tutors'] = [];
                         if($scope.staffReq[i].schedule[day][obj] === 1 ){
                             $scope.table[day][obj]['schedule'] = "available";
-                            $scope.table[day][obj]['tutors'].push($scope.staffReq[i].name);
+                            $scope.table[day][obj]['tutors'].push({
+                                name: $scope.staffReq[i].name,
+                                location: $scope.staffReq[i].location
+                            });
                         }else if ($scope.staffReq[i].schedule[day][obj] === 0 &&
                             $scope.table[day][obj]['schedule'] === "available"){
                             $scope.table[day][obj]['schedule'] = "available";
@@ -151,61 +160,111 @@ app.controller('searchController', function ($scope, $http) {
                 }
             }
         }
+        //console.log($scope.courses);
+        console.log($scope.table);
     });
 
-    $scope.$watch('prefix', function() {$scope.number = undefined});
+    $scope.$watch('prefix', function() {$scope.number = undefined;});
 
     $scope.showTutor = function(hour) {
-        console.log(hour);
         $scope.tutors = hour;
+        $scope.show2 = true;
     };
 });
 </script>
+<style>
+.rot div {
+    /* Safari */
+    -webkit-transform: rotate(-75deg);
+
+    /* Firefox */
+    -moz-transform: rotate(-75deg);
+
+    /* IE */
+    -ms-transform: rotate(-75deg);
+
+    /* Opera */
+    -o-transform: rotate(-75deg);
+
+}
+table td {
+    padding: 0;
+}
+table th {
+    padding: 0;
+    height: 100px;
+}
+body {
+    padding: 0;
+}
+.search {
+    margin: 0 auto;
+    max-width: 480px;
+}
+td[class*=tutors-] {
+    padding: 0;
+}
+
+td[class*=tutors-] div {
+    padding: 0;
+    width: 76px;
+    margin : 10px 0;
+}
+</style>
 </head>
 <body>
 
-<div class="container" ng-controller="searchController" class="search">
+<div ng-controller="searchController" class="search">
     <h1>Search</h1>
     <!--Prefix-->
     <select ng-model="prefix" placeholder="Prefix" ng-options="m.prefix for m in subjects"></select>
     <!--Course #-->
-    <select ng-model="number" placeholder="Number" ng-options="m.course for m in courses"></select>
+    <select ng-model="number" ng-show="show1" placeholder="Number" ng-options="m.course for m in courses"></select>
     <!--Tutor
     <select ng-model="tutor" placeholder="Tutors" ng-options="m.name for m in staff"></select>-->
-    
+    <div ng-show="show1">
     <h4>{{prefix.prefix}} {{number.number}} {{courseTitle}}</h4>
+
     <table>
         <thead>
             <tr>
                 <th></th>
-                <th  style="font-size: 10px;" ng-repeat="hours in table.monday">{{hours.time}}</th>
+                <th class="rot" ng-repeat="day in week" style="text-transform: capitalize;">
+                    <div>{{day}}</div></th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="day in week">
-                <td style="text-transform: capitalize;">{{ day }}</td>
-                <td class="tutors-{{ hour.tutors.length > 0 }}" ng-repeat="hour in table[day]" ng-click="showTutor(hour)">{{hour.tutors.length}}</td>
+            <tr style="font-size: 10px;" ng-repeat="hour in table.monday track by $index">
+                <td style="min-width: 100px;">{{table.monday[$index].time}}</td>
+
+                <td ng-click="showTutor(table.monday[$index])" class="tutors-{{table.monday[$index].tutors.length    > 0 }}"><div>{{table.monday[$index].tutors.length}}</div></td>
+                <td ng-click="showTutor(table.tuesday[$index])" class="tutors-{{table.tuesday[$index].tutors.length   > 0 }}"><div>{{table.tuesday[$index].tutors.length}}</div></td>
+                <td ng-click="showTutor(table.wednesday[$index])" class="tutors-{{table.wednesday[$index].tutors.length > 0 }}"><div>{{table.wednesday[$index].tutors.length}}</div></td>
+                <td ng-click="showTutor(table.thursday[$index])" class="tutors-{{table.thursday[$index].tutors.length  > 0 }}"><div>{{table.thursday[$index].tutors.length }}</div></td>
+                <td ng-click="showTutor(table.friday[$index])" class="tutors-{{table.friday[$index].tutors.length    > 0 }}"><div>{{table.friday[$index].tutors.length   }}</div></td>
             </tr>
         </tbody>
     </table>
-    <div>
-        <table>
-        <thead>
-            <tr>
-                <th>Tutors</th>
-                <th>Location</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><ol>
-                    <li ng-repeat= "tutor in tutors.tutors">{{tutor}}</li>
-                </ol></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
+
+    </div>
+    <div ng-show="show2">
+        <div class = "background"></div>
+        <table class = "popup">
+            <thead>
+                <tr>
+                    <th>Tutors</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat= "tutor in tutors.tutors">
+                    <td>{{tutor.name}}</td>
+                    <td><a href="http://tutoring.engineering.asu.edu/wp-content/uploads/2013/08/Map.jpg">{{tutor.location.title}}</a></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
-</body></html>
+</body>
+</html>
