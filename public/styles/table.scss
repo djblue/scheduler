@@ -6,22 +6,22 @@ table {
 .table {
 
     width: 100%;
-    margin: 20px ;
+
+    margin: 0 auto;
 
     th {
         color: #999;
         background: $grey;
-        padding:10px;
         font-weight: normal;
     }
 
-    td {
-        padding:10px;
+    th, td {
+        padding: 3px 0px;
     }
 
     tr {
         text-align: center;
-        border-bottom: 1px solid $light;
+        /*border-bottom: 1px solid $light;*/
     }
 
     tr:hover {

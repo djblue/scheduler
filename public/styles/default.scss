@@ -26,6 +26,7 @@ h1, h2, h3, h4, h5, h6 {
     color: rgb(75, 75, 75);
 }
 .clear { clear: both; }
+.right { float: right }
 .center { text-align: center; }
 .panel {
     max-width: 240px;
@@ -38,11 +39,16 @@ input[type=text],
 input[type=password], 
 select {
     padding: .5em .6em;
-    margin: 10px 0px;
     border: 1px solid #ccc;
     box-shadow: inset 0 1px 3px #ddd;
     border-radius: $border;
 }
+
+.block {
+    display: block;
+    width: 100%;
+}
+
 .container {
     margin: 0 auto;
     width: 960px;

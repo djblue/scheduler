@@ -1,168 +1,164 @@
 var search = angular.module('search', []);
 
 search.controller('searchController', function ($scope, $http) {
-    
-    $scope.show1 = false;
-    $scope.show2 = false;
 
-    $http.get('/api/subjects').success(function (data) {
-        $scope.subjects = data;
-    });
+    $scope.times = [];
+
+    var j = 9, afterNoon = false;
+    for (var i = 0; i <= 20; i++) {
+        var time;
+        // hit noon
+        if (j % 12 === 0) {
+            afterNoon = true;
+            time = "12"
+        } else {
+            time = '' + j % 12;
+        }
+
+        // full hour
+        if (i % 2 === 0) {
+            time += ':00'
+        // half hour
+        } else {
+             time += ':30'
+            j++;
+        }
+        if (!afterNoon) {
+            time += 'AM';
+        } else {
+            time += 'PM';
+        }
+        if (i != 0) {
+            $scope.times[i-1] += ' - ' + time;
+        }
+        if (i != 20) {
+            $scope.times[i] = time;
+        }
+    }
     
+    // Get all of the staff members and courses that are available for
+    // tutoring. (don't include courses that has no corresponding tutor).
     $http.get('/api/staff').success(function(data) {
-        $scope.staffReq = data;
-        $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
-            return item.location.title; 
-        });
-        // console.log(data);
-    });
 
-    $scope.number;
+        $scope.staff = data;
 
-    $scope.$watchCollection('[prefix, number]', function(){
-       
-        $scope.coursesReq = [];
-
-        // get courses that have 1 > tutors 
-        _.each($scope.staffReq, function (courses) {
-            _.each(courses.courses, function (course) {
-                course['course'] = course.number + "\t" + course.title;
-                if(_.find($scope.coursesReq, function(c){return c.title == course.title}) === undefined)
-                // if(_.find($scope.coursesReq, function(c){return c._id == course._id}) === undefined)
-                    $scope.coursesReq.push(course);         
-            });
-        });
-
-        // sort courses
-        $scope.coursesReq = _.sortBy($scope.coursesReq, function(currentObject) { return currentObject.number; });
-
-        // append everything to get it ready for html rendering.
-        $scope.week = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday' ];
-
-        $scope.table = {
-            monday:     [],
-            tuesday:    [],
-            wednesday:  [],
-            thursday:   [],
-            friday:     []
-        };
-
-        for(day in $scope.table){
-            var j = 9;
-            $scope.times = [];
-            for (var i = 0; i <= 20; i++) {
-                var time;
-                // hit noon
-                if (j % 12 === 0) {
-                    time = "12"
-                } else {
-                    time = '' + j % 12;
-                }
-
-                // full hour
-                if (i % 2 === 0) {
-                    time += ':00'
-                // half hour
-                } else {
-                     time += ':30'
-                    j++;
-                }
-
-                if (i != 0) {
-                    // var temp = function (){
-                    //     if(i % 5 != 0) return "available";
-                    //     return "unavailable";
-                    // };
-
-                    $scope.times[i-1] += '-' + time;
-                    // populate table row
-                    $scope.table[day].push( { 
-                        "id": i-1,
-                        "time" : $scope.times[i-1],
-                        "tutors" : []
-                        //"availability": temp()
+        $http.get('/api/courses').success(function (data) {
+            // If you can find a tutor with a course matching the add it
+            // to the courses list.
+            // NOTE: The '!!' operator forces a truth value to be returned.
+            // This works because underscore 'find' function returns
+            // undefined if nothing is found.
+            $scope.courses = _.filter(data, function (course) {
+                return !!_.find($scope.staff, function (member) {
+                    return !!_.find(member.courses, function (staffCourse)  {
+                        return course._id  == staffCourse._id;
                     });
-                }
-                if (i != 20) {
-                    $scope.times[i] = time;
-                }
-            } 
-        }
-
-        $scope.courseTitle = '';
-
-        if($scope.prefix != undefined){
-            $scope.show1 = true;
-            $scope.courses = _.filter(_.uniq($scope.coursesReq), function (courses) { 
-                return courses.subject === $scope.prefix._id;
+                });
             });
 
-            $scope.staff = [];
+            // As a consequence of getting all of the courses, we can also
+            // get all of the available subjects.
+            $scope.subjects = _.reduce($scope.courses, function(subjects, course) {
+                if (!_.find(subjects, function (subject) { 
+                    return subject._id == course.subject._id &&
+                        subject.location._id == course.location._id; })) {
+                    subjects.push(_.extend(course.subject, { 
+                        location: course.location }));
+                }
 
-            for (var i = 0; i < $scope.staffReq.length; i++){
-                // if user select just a subject
-                if($scope.number == undefined){
-                if(_.find($scope.staffReq[i].courses, function(course){return course.subject === $scope.prefix._id})){
-                    $scope.staff.push($scope.staffReq[i]);
-                    for(day in $scope.staffReq[i].schedule){
-                    for(var obj = 0; obj < $scope.table[day].length;obj++){
-                        //$scope.table[day][obj]['tutors'] = [];
-                        if($scope.staffReq[i].schedule[day][obj] === 1 ){
-                            $scope.table[day][obj]['schedule'] = "available";
-                            $scope.table[day][obj]['tutors'].push({
-                                name: $scope.staffReq[i].name,
-                                location: $scope.staffReq[i].location
-                            });
-                        }else if ($scope.staffReq[i].schedule[day][obj] === 0 &&
-                            $scope.table[day][obj]['schedule'] === "available"){
-                            $scope.table[day][obj]['schedule'] = "available";
-                        }else{
-                            $scope.table[day][obj]['schedule'] = "unavailable";
-                        }
-                    }
-                }
-                }
-                }else{  // if user select a course number
-                if(_.find($scope.staffReq[i].courses, function(course){return (course.number === $scope.number.number && course.subject === $scope.prefix._id)})){
-                    $scope.courseTitle = $scope.number.title;
-                    $scope.staff.push($scope.staffReq[i]);
-                    for(day in $scope.staffReq[i].schedule){
-                    for(var obj = 0; obj < $scope.table[day].length;obj++){
-                        //$scope.table[day][obj]['tutors'] = [];
-                        if($scope.staffReq[i].schedule[day][obj] === 1 ){
-                            $scope.table[day][obj]['schedule'] = "available";
-                            $scope.table[day][obj]['tutors'].push({
-                                name: $scope.staffReq[i].name,
-                                location: $scope.staffReq[i].location
-                            });
-                        }else if ($scope.staffReq[i].schedule[day][obj] === 0 &&
-                            $scope.table[day][obj]['schedule'] === "available"){
-                            $scope.table[day][obj]['schedule'] = "available";
-                        }else{
-                            $scope.table[day][obj]['schedule'] = "unavailable";
-                        }
-                    }
-                }
-                }   
-                }
-            }
-        }
+                return subjects;
+            }, []);
+        });
     });
 
-    $scope.$watch('prefix', function() {$scope.number = undefined;});
+    $scope.selectedCourses = [];
 
-    $scope.showTutor = function(hour, day) {
-        if(hour.tutors.length > 0){ 
-            $scope.time = day + ' ' + hour.time;
-            $scope.tutors = hour;
-            $scope.show2 = true;
-            $scope.show1 = false;
+    // Update the course list based on the selected subject and location.
+    $scope.updateCourses = function () {
+
+        $scope.schedule = [];
+        $scope.showTutors = false;
+
+        // Reset courses if the subject is null.
+        if ($scope.subject == null) {
+            $scope.selectedCourses = [];
+            return;
         }
+        // Only get courses which have a matching subject_id and
+        // location_id.
+        $scope.selectedCourses = _.filter($scope.courses, function (course) {
+            return course.subject._id == $scope.subject._id && 
+                course.location._id == $scope.subject.location._id;
+                 
+        });
     };
 
-    $scope.showTable = function () {
-    
-        $scope.show2 = false;
-        $scope.show1 = true;
+    $scope.schedule = [];
+
+    // Update the schedule when the selected courses change.
+    $scope.updateSchedule = function () {
+
+        $scope.schedule = [];
+        $scope.showTutors = false;
+        $scope.schedule = _.chain($scope.staff)
+        
+        // Find all of the staff members that have the given course
+        .filter(function (member) {
+            return !!_.find(member.courses, function (course) {
+                return course._id == $scope.course._id;
+            });
+        })
+        
+        // Map each hour of their availability with their id.
+        .map(function (member) {
+            return [
+                _.map(member.schedule.monday, function (hour) {
+                    return (hour == 1)? [member._id] : []; }),
+                _.map(member.schedule.tuesday, function (hour) {
+                    return (hour == 1)? [member._id] : []; }),
+                _.map(member.schedule.wednesday, function (hour) {
+                    return (hour == 1)? [member._id] : []; }),
+                _.map(member.schedule.thursday, function (hour) {
+                    return (hour == 1)? [member._id] : []; }),
+                _.map(member.schedule.friday, function (hour) {
+                    return (hour == 1)? [member._id] : []; })
+            ];
+        })
+
+        // Combine all of the availabilities into a single 2D array.
+        .reduce(function (schedule, days) {
+            if (!schedule) {
+                return days;
+            } else {
+                return _.map(days, function (hours, i) { 
+                    return _.map(hours, function (available, j) {
+                        if (available.length == 1) {
+                            return schedule[i][j].concat(available);
+                        } else {
+                            return schedule[i][j];
+                        }
+                    });
+                });
+            }
+        })
+
+        .value();
     };
+
+    // Display all of the tutors on the schedule at a igiven time.
+    $scope.listTutors = function (i,j) {
+
+        // List tutors only if there are some available.
+        if ($scope.schedule[i][j].length == 0) return; 
+
+        $scope.availableTutors = _.map($scope.schedule[i][j], function (tutor_id) {
+            return _.find($scope.staff, function (member) {
+                return member._id == tutor_id;
+            });
+        });
+        $scope.time = $scope.times[j];
+        $scope.day = ['Monday','Tuesday','Wednesday','Thursday','Friday'][i];
+        $scope.showTutors = true;
+    };
+
 });

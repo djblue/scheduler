@@ -1,6 +1,13 @@
 .search {
-    margin: 0 auto;
+
+    font-size: 16px;
+
+    /*background: #ffffff;*/
+
     max-width: 560px;
+    margin: 0px auto;
+    padding: 20px;
+    /*box-shadow: 0 0 2px black;*/
 
     .left {
         min-width: 100px;
@@ -10,28 +17,29 @@
 
 .search-table  {
 
-    th {
-        height: 88px;
+
+    td:first-child {
+        width: 20%;
+    }
+    
+    th, td {
+        width: 8%;
     }
 
-    th, td {
-        border: 1px black solid;
+    tr:nth-child(even) {
+        border-bottom: 1px $grey solid;
     }
 
     td {
         text-align: center;
     }
 
-    td div {
-        width: 76px;
-        margin: 1px 0;
-    }
-       
     .tutors-true {
         background: $green;
     }
 
     .tutors-true:hover {
+        cursor: pointer;
         background: $blue;
     }
 }
@@ -40,15 +48,8 @@
     display: inline-block;
     width: 12%;
 }
+
 .course {
     display: inline-block;
     width: 80%;
 }
-
-.rot div {
-    -webkit-transform: rotate(-75deg);
-    -moz-transform: rotate(-75deg);
-    -ms-transform: rotate(-75deg);
-    -o-transform: rotate(-75deg);
-}
-

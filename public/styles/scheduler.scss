@@ -1,8 +1,3 @@
-/**
- * This this theme file is directly influenced by the pure css framework.
- *   http://purecss.io/ 
- */
-
 body {
     padding-left: 150px;
 }
@@ -17,7 +12,6 @@ button,
 div[class*='btn'],
 input[class*='btn']
 {
-    display: inline-block;
     background: #0e90d2;
     cursor: pointer;
     border: 0;
@@ -25,6 +19,11 @@ input[class*='btn']
     font-size: 100%;
     padding: .5em 1.5em;
     color: #fff;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
 }
 
 button:hover {
