@@ -71,7 +71,6 @@ app.controller('hoursController', function ($scope, $http) {
     }
 
     $scope.submit = function () {
-        console.log($scope.maxHours);
         $http.post(document.URL, {
             availability: $scope.days,
             courses: $scope.selectedCourses,

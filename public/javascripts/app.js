@@ -29,37 +29,6 @@ var app = angular.module('app', ['ngRoute', 'app.directives'])
             otherwise({ redirectTo: '/' });
     }]);
 
-// Authentication service 
-app.service('userService', function ($http, $rootScope) {
-
-    var self = this;
-
-    self.status = { logged: false };
-
-    // Try to get user data on service startup
-    $http.get('/api/user').success(function (data) {
-        if (!!data.username) {
-            self.status['user'] = data;
-            self.status.logged = true;
-        }
-    });
-
-    this.login = function (user, pass, call) {
-        $http.post('/api/login', {
-            username: user,
-            password: pass 
-        }).success(function (data) {
-            if (!!data.username) {
-                self.status['user'] = data;
-                self.status.logged = true;
-                call(false, data);
-            }
-        }).error(function () {
-            call(true);
-        });
-    };
-});
-
 app.controller('schedulerController', function ($routeParams, $scope, $http) {
 
     $scope.days = [
@@ -152,13 +121,11 @@ app.controller("StaffController",function ($scope, $http) {
             }
         }
     };
-    ///
 
     $scope.$watch('staff', function () {
         $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
             return item.location.title; 
         });
-        //console.log($scope.staffByLoc);
     }, true);
 
     $http.get('/api/subjects').success(function (data) {
@@ -226,10 +193,7 @@ app.controller('searchController', function ($scope, $http) {
         $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
             return item.location.title; 
         });
-        // console.log(data);
     });
-    
-    // console.log($scope.table);
     
     $scope.number;
 
@@ -335,11 +299,6 @@ app.controller('searchController', function ($scope, $http) {
                 }
             }
         }
-        console.log ($scope.table);
-        //console.log ($scope.staffReq);
-        // console.log ($scope.staffReq[1].availability.friday[1]);
-        // console.log($scope.staff);
-        // console.log(undefined | 1);
     });
 
     $scope.$watch('prefix', function() {$scope.number = undefined});
