@@ -58,5 +58,10 @@
         "_id": "11",
         "title": "Computer Science Engineering",
         "prefix": "CSE"
+    },
+    {
+        "_id": "12",
+        "title": "Fulton School of Engineering",
+        "prefix": "FSE"
     }
 ]
