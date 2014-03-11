@@ -42,6 +42,22 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: $border;
 }
 
+.seemless:hover {
+    border-bottom: 1px $green solid;
+}
+.seemless:focus {
+    border-bottom: 1px $blue solid;
+}
+.seemless {
+    background: none;
+    padding: .5em .6em;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    border: 0;
+    outline: none;
+    border-bottom: 1px rgba(0,0,0,0) solid;
+}
+
 .block {
     display: block;
     width: 100%;

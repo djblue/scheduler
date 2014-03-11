@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'app.directives'])
+var app = angular.module('app', ['ngRoute', 'ngResource', 'app.directives'])
 .config(['$routeProvider', 
     function ($routeProvider) {
         $routeProvider.
@@ -93,17 +93,58 @@ app.controller('schedulerController', function ($routeParams, $scope, $http) {
     });
 });
 
-// staff controller
-app.controller("StaffController",function ($scope, $http) {
+app.service('Staff', ['$resource', '$q', function ($resource, $q) {
+    
+    var Staff = $resource('/api/staff/:id',
+        { id: '@_id'}, 
+        {
+            'updateName': { 
+                method: 'PUT', 
+                transformRequest: function (item) {
+                    return JSON.stringify(_.pick(item, 'name'));
+                }
+            }
+        }
+    ); 
+    
+    var query = Staff.query();
 
-    $http.get('/api/staff').success(function(data) {
-        $scope.staff = data;
+    return {
+        find: function (id) {
+            // find and individual staff member
+            if (!!id) {
+                var defer = $q.defer();
+
+                query.$promise.then(function (items) {
+                    defer.resolve(_.find(items, function (item) {
+                        return item._id == id; 
+                    }));
+                });
+
+                return defer.promise;
+            // return everybody
+            } else {
+                return query.$promise;
+            }
+        }
+    };  
+}]);
+
+// A controller to help manage staff members.
+// You can add/update/delete staff members using this controller.
+// It used the 'Staff' service to manage all of the client/server
+// communication.
+app.controller("StaffController",function ($scope, $http, Staff) {
+
+    // Get all of the staff member from the server; also group the by
+    // their location.
+    Staff.find().then(function (staff) {
+        $scope.staff = staff;
         $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
             return item.location.title; 
         });
     });
 
-    ///
     $scope.bt1 = "Clear ALL";
 
     $scope.allEditable = function(){
@@ -156,6 +197,11 @@ app.controller("StaffController",function ($scope, $http) {
             $scope.location = '';
         });
     };
+
+    $scope.updateStaff = _.debounce(function (staff) {
+        staff.$updateName();
+        console.log(staff);
+    }, 1500);
      
     $scope.removeContact = function(memberToRemove) {
         var index = $scope.staff.indexOf(memberToRemove);
