@@ -3,61 +3,56 @@
     <table class="table">
         <!--Add staff-->
         <tr>
-            <td><input type="text" placeholder="Name" ng-model="name"/></td>
-            <td><input type="text" placeholder="Email" ng-model="email"/></td>
-            <td><select ng-model="major" placeholder="Major" 
-                ng-options="m._id as m.prefix for m in subjects"></select>
+            <td><input class="input" 
+                       type="text"
+                       placeholder="Name" 
+                       ng-model="newMember.name"/></td>
+            <td><input class="input"
+                       type="text" 
+                       placeholder="Email"
+                       ng-model="newMember.email"/></td>
+            <td><select class="input"
+                        ng-model="newMember.major" 
+                        placeholder="Major" 
+                        ng-options="m._id as m.prefix for m in subjects"></select></td>
+            <td><select class="input"
+                        ng-model="newMember.location"
+                        placeholder="Location" 
+                        ng-options="l._id as l.title for l in locations"></select>
             </td>
-            <td><select ng-model="location" placeholder="Location" 
-                ng-options="l._id as l.title for l in locations"></select>
-            </td>
-            <td><button ng-click="addContact()">add</button></td>
+            <td><button ng-click="add(newMember)">add</button></td>
         </tr> 
     </table>
 
-    <div>
-        <table class="table">
-            <tr>
-                <td><button class ="btn-green" ng-click="allEditable()">Send ALL</button></td>
-                <td><button class ="btn-green" ng-click="allEditable()">{{bt1}}</button></td>
-            </tr>
-        </table>
-    </div>
+    <td><button class ="btn-green" ng-click="toggle()">Toggle Editable</button></td>
 
-    <div ng-repeat="(location, contacts) in staffByLoc">
+    <div ng-repeat="(location, staff) in staffByLoc">
         <h2>{{ location }}</h2>
         <table class="table">
             <thead>
                 <tr>
+                    <th>Editable</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Major</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                   
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="contact in contacts">
-                    <td><input ng-model="contact.name"
-                               ng-change="updateStaff(contact)"
+                <tr ng-repeat="member in staff | orderBy:name">
+                    <td><input type="checkbox" ng-checked="member.editable" 
+                         ng-click="member"></td>
+                    <td><input ng-model="member.name"
+                               ng-change="update(member)"
                                class="seemless" 
                                type="text"/></td>
-                    <td><input ng-model="contact.email"
-                               ng-model="updateStaff(contact)"
+                    <td><input ng-model="member.email"
+                               ng-model="update(member)"
                                class="seemless" 
                                type="text"/></td>
-                    <td>{{contact.major.prefix}}</td>
-                    <td><button class ="btn-orange" 
-                        ng-click="clearContact(contact)">clear</button></td>
+                    <td>{{member.major.prefix}}</td>
                     <td><button class ="btn-red"
-                        ng-click="removeContact(contact)">Remove</button></td>
-                    <td><button class ="btn-green"
-                        ng-click="clearContact(contact)">Email</button></td>
-                    <td><input type="checkbox" ng-checked="contact.editable" 
-                         ng-click="update(contact)"></td>
+                        ng-click="remove(member)">Remove</button></td>
                 </tr>
             </tbody>
         </table>

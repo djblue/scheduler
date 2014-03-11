@@ -93,82 +93,132 @@ app.controller('schedulerController', function ($routeParams, $scope, $http) {
     });
 });
 
-app.service('Locations', ['$resource', '$q', function ($resource, $q) {
-    
-    return $resource('/api/locations/:id',
-        { id: '@_id'}, 
-        {
-            'update': { method: 'PUT' }
+// A little $resource helper class that extends the functionality of the
+// angular $resource object. It adds the ability of synchronizing client
+// data as well as server data, something not in $resource.
+app.factory('Resource', ['$resource', '$q',
+
+function ($resource, $q) {
+
+    var Resource = function (name, methods) { 
+        // Define the resource.
+        this.$resource = $resource('/api/'+name+'/:id', { id: '@_id'}, methods);
+
+        // Current cache of server data. Assume only client to server.
+        this.data = this.$resource.query();
+    };
+
+    // Define additional actions for Resource. Most return promises due to
+    // the nature of resource calls.
+
+    // Find item based by id or get a listing of all items. Returns
+    // promise (use .then() and pass callback).
+    Resource.prototype.find = function (id) {
+       // find and individual staff member
+        if (!!id) {
+            var defer = $q.defer();
+
+            data.$promise.then(function (items) {
+                defer.resolve(_.find(items, function (item) {
+                    return item._id == id; 
+                }));
+            });
+
+            return defer.promise;
+        // find all staff members
+        } else {
+            return data.$promise;
         }
-    ).query().$promise;
+    };
+
+
+    // Update a item. Denounce protection mean you can spam the crap out
+    // of this thing with something like ngChange and the function will at
+    // most be executed once per 500 milliseconds.
+    Resource.prototype.update = _.debounce(function (item) {
+        item.$update();
+    }, 500);
+
+    // Add a new item.
+    Resource.prototype.add = function(info) {
+        var self = this;
+        var item = new this.$resource(info);
+        item.$save().then(function () {
+            self.data.push(item);
+        });
+    };
+
+    // Remove an item.
+    Resource.prototype.remove = function (item) {
+        var self = this;
+        var i = self.data.indexOf(item);
+        this.data[i].$delete(function () {
+            self.data.splice(i, 1);    
+        });
+    };
+    
+    return Resource;
+}]);
+
+// Basic location controller.
+app.service('Locations', ['Resource',
+
+function (Resource) {
+    
+    return new Resource('locations');
 
 }]);
 
-app.service('Staff', ['$resource', '$q', 'Locations', 
+app.service('Subjects', ['Resource', 
 
-function ($resource, $q, Locations) {
+function (Resource) {
+
+    return new Resource('subjects');
     
-    var Staff = $resource('/api/staff/:id',
-        { id: '@_id'}, 
-        {
-            'updateName': { 
-                method: 'PUT', 
-                transformRequest: function (item) {
-                    return JSON.stringify(_.pick(item, 'name'));
-                },
-                transformResponse:  function (item) {
-                    Locations.then(function (locations) {
-                        item.location = _.find(locations, function (obj) {
-                            return obj.location == item.location
-                        });
-                        return item;
+}]);
+
+// Staff service to manage staff member and keep data synced between
+// server and client.
+app.service('Staff', ['$resource', '$q',  'Resource', 'Locations',
+
+function ($resource, $q, Resource, Locations) {
+
+    // Define the resource.
+    var Staff = new Resource('staff', {
+        'updateName': { 
+            method: 'PUT', 
+            transformRequest: function (item) {
+                return JSON.stringify(_.pick(item, 'name'));
+            },
+            transformResponse:  function (item) {
+                Locations.data.$promise.then(function (locations) {
+                    item.location = _.find(locations, function (obj) {
+                        return obj.location == item.location
                     });
-                }
-            }
-        }
-    ); 
-    
-    var query = Staff.query();
-
-    return {
-        find: function (id) {
-            // find and individual staff member
-            if (!!id) {
-                var defer = $q.defer();
-
-                query.$promise.then(function (items) {
-                    defer.resolve(_.find(items, function (item) {
-                        return item._id == id; 
-                    }));
+                    return item;
                 });
-
-                return defer.promise;
-            // return everybody
-            } else {
-                return query.$promise;
             }
         }
-    };  
+    });
+
+    return Staff;
+
 }]);
 
-// A controller to help manage staff members.
-// You can add/update/delete staff members using this controller.
-// It used the 'Staff' service to manage all of the client/server
-// communication.
-app.controller("StaffController",function ($scope, $http, Staff) {
+// A controller to help manage staff members.  You can add/update/delete
+// staff members using this controller.  It used the 'Staff' service to
+// manage all of the client/server communication.
+app.controller("StaffController", ["$scope", "$http", "Staff", "Locations", "Subjects",
+
+function ($scope, $http, Staff, Locations, Subjects) {
 
     // Get all of the staff member from the server; also group the by
     // their location.
-    Staff.find().then(function (staff) {
-        $scope.staff = staff;
-        $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
-            return item.location.title; 
-        });
-    });
+    $scope.staff     = Staff.data;
+    $scope.locations = Locations.data;
+    $scope.subjects  = Subjects.data;
 
-    $scope.bt1 = "Clear ALL";
-
-    $scope.allEditable = function(){
+    $scope.toggle = function(){
         if($scope.bt1 === "Clear ALL"){
             $scope.bt1 = "Select ALL";
             for(var i = 0; i < $scope.staff.length; i++){
@@ -190,54 +240,18 @@ app.controller("StaffController",function ($scope, $http, Staff) {
         });
     }, true);
 
-    $http.get('/api/subjects').success(function (data) {
-        $scope.subjects = data;
-    });
-
-    $http.get('/api/locations').success(function (data) {
-        $scope.locations = data;
-    });
-
-    $scope.update = function(contact){
-        $http.put('/api/staff/' + contact._id, {editable: !contact.editable}).success(function(){
-            contact.editable = !contact.editable;
-        });
-    };
-    
-    $scope.addContact = function() {
-        $http.post('/api/staff', {
-            name: $scope.name, 
-            email: $scope.email, 
-            major: $scope.major,
-            location: $scope.location
-        }).success(function(data){
-            $scope.staff.push(data);
-            $scope.name = '';
-            $scope.email = '';
-            $scope.major = '';
-            $scope.location = '';
-        });
-    };
-
-    $scope.updateStaff = _.debounce(function (staff) {
-        staff.$updateName();
-        console.log(staff);
-    }, 1500);
+    // Add a new staff member
+    $scope.add = function() { Staff.add($scope.newMember); };
+    // Update a staff member
+    $scope.update = _.debounce(function (member) {
+        member.$updateName();
+    }, 500);
+    // Remove a contact from 
+    $scope.remove = function (member) {  Staff.remove(member); };
      
-    $scope.removeContact = function(memberToRemove) {
-        var index = $scope.staff.indexOf(memberToRemove);
-        $http.delete('/api/staff/' + memberToRemove._id).success(function(){
-            $scope.staff.splice(index, 1);    
-        });
-    };
-     
-    $scope.clearContact = function(contact) {
-        contact.name = '';
-        contact.email = '';
-        contact.major = '';
-    };
-});
+}]);
 
+// A controller to help manage locations.
 app.controller('locationController', function ($scope, $http) {
     $http.get('/api/locations').success(function (data) {
         $scope.locations = data;
