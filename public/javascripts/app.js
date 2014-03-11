@@ -93,7 +93,20 @@ app.controller('schedulerController', function ($routeParams, $scope, $http) {
     });
 });
 
-app.service('Staff', ['$resource', '$q', function ($resource, $q) {
+app.service('Locations', ['$resource', '$q', function ($resource, $q) {
+    
+    return $resource('/api/locations/:id',
+        { id: '@_id'}, 
+        {
+            'update': { method: 'PUT' }
+        }
+    ).query().$promise;
+
+}]);
+
+app.service('Staff', ['$resource', '$q', 'Locations', 
+
+function ($resource, $q, Locations) {
     
     var Staff = $resource('/api/staff/:id',
         { id: '@_id'}, 
@@ -102,6 +115,14 @@ app.service('Staff', ['$resource', '$q', function ($resource, $q) {
                 method: 'PUT', 
                 transformRequest: function (item) {
                     return JSON.stringify(_.pick(item, 'name'));
+                },
+                transformResponse:  function (item) {
+                    Locations.then(function (locations) {
+                        item.location = _.find(locations, function (obj) {
+                            return obj.location == item.location
+                        });
+                        return item;
+                    });
                 }
             }
         }
