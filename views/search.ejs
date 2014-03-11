@@ -68,7 +68,8 @@
 
     <!-- select a course -->
     <div class="col-1-1">
-    <select ng-model="subject"
+    <select class="input"
+            ng-model="subject"
             ng-options="subject.prefix
                         group by subject.location.title 
                         for subject in subjects"
@@ -80,7 +81,8 @@
     </div>
 
     <div class="col-1-1">
-    <select ng-model="course"
+    <select class="input"
+            ng-model="course"
             ng-options="course.number + ': ' + course.title
                         for course in selectedCourses"
             ng-change="updateSchedule()">

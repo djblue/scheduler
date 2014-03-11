@@ -41,8 +41,8 @@
             </thead>
             <tbody>
                 <tr ng-repeat="contact in contacts">
-                    <td>{{contact.name}}</td>
-                    <td>{{contact.email}}</td>
+                    <td><input type="text" value="{{contact.name}}"/></td>
+                    <td><input type="text" value="{{contact.email}}"/></td>
                     <td>{{contact.major.prefix}}</td>
                     <td><button class ="btn-orange" 
                         ng-click="clearContact(contact)">clear</button></td>
@@ -56,4 +56,5 @@
             </tbody>
         </table>
     </div>
+
 </div>
