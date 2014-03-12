@@ -1,9 +1,27 @@
+<style>
+    .selected-true {
+        text-decoration: underline;
+    }
+</style>
 <table class="table">
     <tr>
         <th style="text-transform: capitalize;"
-            ng-repeat="key in keys">{{key}}</th>
+            class="selected-{{key==order}}"
+            ng-repeat="key in keys"
+            ng-click="sort(key.field)"><span style="cursor: pointer">{{key.field}}</span></th>
     </tr>
-    <tr ng-repeat="object in objects">
-        <td ng-repeat="key in keys">{{object[key]}}</td>
+    <tr ng-repeat="object in objects | orderBy:order:reverse">
+        <td ng-repeat="key in keys">
+            <div ng-switch on="key.editable">
+                <div ng-switch-when="true">
+                    <input ng-model="object[key.field]"
+                           ng-change="update(object, key.field)"
+                           class="seemless" 
+                           style="width: 100%"
+                           type="text"/>
+                </div>
+                <div ng-switch-default>{{object[key.field]}}</div>
+            </div>
+        </td>
     </tr>
 </table>

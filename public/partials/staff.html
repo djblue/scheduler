@@ -45,11 +45,11 @@
                     <td><input type="checkbox" ng-checked="member.editable" 
                          ng-click="member"></td>
                     <td><input ng-model="member.name"
-                               ng-change="update(member)"
+                               ng-change="update(member, 'name')"
                                class="seemless" 
                                type="text"/></td>
                     <td><input ng-model="member.email"
-                               ng-model="update(member)"
+                               ng-change="update(member, 'email')"
                                class="seemless" 
                                type="text"/></td>
                     <td>{{member.major.prefix}}</td>

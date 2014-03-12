@@ -7,9 +7,42 @@ angular.module('app.directives', [])
         templateUrl: '/partials/tableView.html',
         scope: {
             objects: '=',
-            keys: '='
+            keys: '=',
+            update: '=',
+            // initial sorting
+            order: '@',
+            reverse: '@'
         },
-        link: function (scope, element, attrs) { }
+        link: function (scope, element, attrs) {
+
+            // setup some sane defaults
+            scope.order   = (scope.order == undefined)?   '_id' : scope.order;
+            scope.reverse = (scope.reverse == undefined)? false : scope.reverse;
+
+            scope.fields = [];
+
+            scope.$watch('keys', function () {
+                scope.keys = _.map(scope.keys, function (key) {
+                    if (_.isObject(key)) {
+                        return key;
+                    } else {
+                        return { field: key.split('.')[0], editable: false };
+                    }
+                });
+            }, true);
+
+            // Wouldn't it be grand if we could sort!
+            scope.sort = function (key) {
+                // already selected, toggle reverse
+                if (key == scope.order) {
+                    scope.reverse = !scope.reverse;
+                } else {
+                    scope.reverse = false;
+                    scope.order = key;
+                }
+            };
+
+        }
     }
 })
 

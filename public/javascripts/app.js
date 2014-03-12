@@ -83,12 +83,13 @@ function ($routeParams, $scope, $http) {
 // A little $resource helper class that extends the functionality of the
 // angular $resource object. It adds the ability of synchronizing client
 // data as well as server data, something not in $resource.
-app.factory('Resource', ['$resource', '$q',
+app.factory('Resource', ['$http', '$resource', '$q',
 
-function ($resource, $q) {
+function ($http, $resource, $q) {
 
     var Resource = function (name, methods) { 
         // Define the resource.
+        this.name = name;
         this.$resource = $resource('/api/'+name+'/:id', { id: '@_id'}, methods);
 
         // Current cache of server data. Assume only client to server.
@@ -122,8 +123,22 @@ function ($resource, $q) {
     // Update a item. Denounce protection mean you can spam the crap out
     // of this thing with something like ngChange and the function will at
     // most be executed once per 500 milliseconds.
-    Resource.prototype.update = _.debounce(function (item) {
-        item.$update();
+    Resource.prototype.update = _.debounce(function (item, keys) {
+        var defer = $q.defer();
+        console.log(keys)
+
+        $http.put('/api/'+this.name+'/'+item._id, _.pick(item, keys))
+            .success(function (data, status) {
+                console.log('success');
+                console.log(data);
+                defer.resolve(null,data);
+            })
+            .error(function (data, status) {
+                console.log('failure');
+                defer.resolve(data);
+            });
+
+        return defer.promise;
     }, 500);
 
     // Add a new item.
@@ -238,9 +253,7 @@ function ($scope, $http, Staff, Locations, Subjects) {
     // Add a new staff member
     $scope.add = function() { Staff.add($scope.newMember); };
     // Update a staff member
-    $scope.update = _.debounce(function (member) {
-        member.$updateName();
-    }, 500);
+    $scope.update = function (member, keys) { Staff.update(member, keys); };
     // Remove a contact from 
     $scope.remove = function (member) {  Staff.remove(member); };
      
@@ -266,8 +279,14 @@ function ($scope, Subjects) {
 
     Subjects.data.$promise.then (function (data) {
         $scope.objects = Subjects.data;
-        $scope.keys = ['_id', 'title', 'prefix'];
+        $scope.keys = [
+            { field: 'prefix', editable: true }, 
+            { field: 'title', editable: true }, 
+        ];
     });
+
+    $scope.update = function (subject, key) { Subjects.update(subject, key); };
+
 }]);
 
 app.controller('CoursesController', ['$scope', 'Courses',
@@ -276,8 +295,16 @@ function ($scope, Courses) {
 
     Courses.data.$promise.then (function (data) {
         $scope.objects = Courses.data;
-        $scope.keys = ['_id', 'number', 'title'];
+        $scope.keys = [
+            'subject.prefix',
+            'subject.title',
+            { field: 'number', editable: true },
+            { field: 'title', editable: true },
+            'location.title'
+        ];
     });
+
+    $scope.update = function (course, key) { Courses.update(course, key); };
 }]);
 
 app.controller('logController', function ($scope, $http) {
