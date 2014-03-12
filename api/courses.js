@@ -1,5 +1,7 @@
 var mongoose  = require('mongoose')
  ,  Schema    = mongoose.Schema
+ ,  auth      = require('./auth')
+ ,  Resource  = require('./resource')
  ,  Subject   = require('./subjects').Subject;
 
 // Setup the use model.
@@ -10,19 +12,6 @@ var Course = exports.Course = mongoose.model('Course', {
     title: String,
     location: { type: String, ref: 'Location' }
 });
-
-var list = function (req, res) {
-    Course.find()
-        .populate('subject')
-        .populate('location')
-        .exec(function (err, staff) {
-            if (err) {
-                res.json(err);
-            } else {
-                res.json(staff);
-            }
-        });
-};
 
 var listByLocation = function (req, res) {
     Course.find({ location: req.params.location })
@@ -37,6 +26,9 @@ var listByLocation = function (req, res) {
 };
 
 exports.setup = function (app) {
-    app.get('/api/courses', list);
-    app.get('/api/courses/:location', listByLocation);
+    app.get('/api/courses',                              Resource.list(Course));
+    app.get('/api/courses/:location',                    listByLocation);
+    app.post('/api/courses',       auth.isAuthenticated, Resource.add(Course));
+    app.put('/api/courses/:id',    auth.isAuthenticated, Resource.update(Course));
+    app.delete('/api/courses/:id', auth.isAuthenticated, Resource.remove(Course));
 };

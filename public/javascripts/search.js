@@ -42,7 +42,9 @@ search.controller('searchController', function ($scope, $http) {
 
         $scope.staff = data;
 
-        $http.get('/api/courses').success(function (data) {
+        $http.get('/api/courses?expand=location&expand=subject')
+
+        .success(function (data) {
             // If you can find a tutor with a course matching the add it
             // to the courses list.
             // NOTE: The '!!' operator forces a truth value to be returned.

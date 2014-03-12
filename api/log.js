@@ -1,7 +1,6 @@
 var mongoose  = require('mongoose')
  ,  Schema    = mongoose.Schema
- ,  auth      = require('./auth')
- , Location   = require('./locations').Location;
+ ,  Resource  = require('./resource');
 
 
 // Setup the model.
@@ -10,17 +9,6 @@ var Log = exports.Log = mongoose.model('Log', {
     message: String,
     time: { type: Date, default: Date.now }
 });
-
-var list = function (req, res) {
-    Log.find()
-        .exec(function (err, staff) {
-            if (err) {
-                res.json(err);
-            } else {
-                res.json(staff);
-            }
-        });
-};
 
 // log event
 exports.write = function (title, message) {
@@ -31,5 +19,5 @@ exports.write = function (title, message) {
 }; 
 
 exports.setup = function (app) {
-    app.get('/api/log', list);
+    app.get('/api/log', Resource.list(Log));
 };
