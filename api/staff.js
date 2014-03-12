@@ -216,7 +216,7 @@ var getHours = function (req, res, next) {
 
 };
 
-function and (a, b) {
+var and = function and (a, b) {
     var result = [];
 
     for (var i = 0; i < a.length; i++)  {
@@ -228,34 +228,35 @@ function and (a, b) {
 
 var submitHours = function (req, res) {
 
-   var a = _.clone(req.body.availability);
+    var s, a = _.clone(req.body.availability);
+    req.body = _.omit(req.body, 'availability');
 
     // ensure that schedule is consistent with availability
-    if (!!a) {
-        Staff.findById(req.params.id)
-            .exec(function (err, staff) {
-                staff.availability = a;
-                staff.schedule = {
-                    monday: and(a.monday, staff.schedule.monday),
-                    tuesday: and(a.tuesday, staff.schedule.tuesday),
-                    wednesday: and(a.wednesday, staff.schedule.wednesday),
-                    thursday: and(a.thursday, staff.schedule.thursday),
-                    friday: and(a.friday, staff.schedule.friday)
-                }
-                console.log(staff.schedule);
-                staff.save();
-            });
-        req.body = _.omit(req.body, 'availability');
-    }
-
     Staff.findByIdAndUpdate(req.params.id, req.body)
         .exec(function (err, staff) {
             if (err) {
                 res.json(500, err);
             } else {
-                res.json(200, staff);
                 log.write('Staff Updated',
                     staff.name + ' submitted their hours.');
+            }
+            s = staff;
+        })
+        .then(function () {
+            if (!!a) {
+                s.availability = a;
+                s.schedule = {
+                    monday: and(a.monday, s.schedule.monday),
+                    tuesday: and(a.tuesday, s.schedule.tuesday),
+                    wednesday: and(a.wednesday, s.schedule.wednesday),
+                    thursday: and(a.thursday, s.schedule.thursday),
+                    friday: and(a.friday, s.schedule.friday)
+                };
+                s.save(function (err, staff) {
+                    res.json(200, s);
+                });
+            } else {
+                res.json(200, s);
             }
         });
 };
@@ -280,7 +281,7 @@ var schedule = function (req, res) {
                 staff: JSON.stringify(_.sortBy(staff, 'name'))
             });
     });
-}
+};
 
 exports.setup = function (app) {
     app.get('/api/staff', list);

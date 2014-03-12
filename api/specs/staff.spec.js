@@ -1,6 +1,37 @@
 var app     = require('../../app').app
   , Staff   = require('../staff').Staff
-  , request = require('supertest');
+  , User    = require('../users').User 
+  , request = require('supertest')
+  , agent   = request.agent(app);
+
+
+var auth = new User({ username: 'root', password: 'password' });
+auth.save();
+
+describe('/api/staff authentication', function () {
+    it('should be unaccessible and redirect.', function (done) {
+        request(app)
+            .post('/api/staff')
+            .set('Accept', 'application/json')
+            .redirects(1)
+            .end(function (err, res) {
+                expect(res.status).toBe(200);
+                expect(res.text).toContain('username');
+                expect(res.text).toContain('password');
+                done();
+            });
+    });
+    it('should let you login', function (done) {
+        agent
+            .post('/api/login')
+            .send({username: auth.username, password: auth.password})
+            .end(function (err, res) {
+                expect(res.status).toBe(302);
+                done();
+            });
+
+    });
+});
 
 describe('/api/staff', function () {
     // clear the database
@@ -10,7 +41,8 @@ describe('/api/staff', function () {
         staff = new Staff({
             name: 'jane doe',
             email: 'jane@doe.com',
-            major:  '0'
+            major:  '0',
+            location: 0
         });
         staff.save();
     });
@@ -25,11 +57,12 @@ describe('/api/staff', function () {
     });
     it('should be able to add a staff member.', function (done) {
         var staff = { 
-            major: '1', 
             name: 'john doe', 
-            email: 'john@doe.com'
+            email: 'john@doe.com',
+            major: '1', 
+            location: '0'
         };
-        request(app)
+        agent
             .post('/api/staff')
             .set('Accept', 'application/json')
             .send(staff)
@@ -42,7 +75,7 @@ describe('/api/staff', function () {
             });
     });
     it('should be able to update a staff member.', function (done) {
-        request(app)
+        agent
             .put('/api/staff/'+staff._id)
             .set('Accept', 'application/json')
             .send({ editable: false })
@@ -56,7 +89,7 @@ describe('/api/staff', function () {
             });
     });
     it('should be able to remove a staff member.', function (done) {
-        request(app)
+        agent
             .del('/api/staff/'+staff._id)
             .set('Accept', 'application/json')
             .end(function (err, res) {
@@ -88,10 +121,11 @@ describe('/api/staff', function () {
                 ]
             }
         };
-        request(app)
+        agent
             .post('/staff/'+staff._id)
             .send(data)
             .end(function (err, res) {
+                expect(res.status).toBe(200);
                 expect(res.body._id).toBe(''+staff._id);
                 expect(res.body.max).toBe(data.max);
                 expect(res.body.phone).toBe(data.phone);

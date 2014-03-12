@@ -38,5 +38,5 @@ var listByLocation = function (req, res) {
 
 exports.setup = function (app) {
     app.get('/api/courses', list);
-    app.get('/api/courses/:location', listByLocation)
+    app.get('/api/courses/:location', listByLocation);
 };
