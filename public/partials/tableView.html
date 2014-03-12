@@ -1,0 +1,9 @@
+<table class="table">
+    <tr>
+        <th style="text-transform: capitalize;"
+            ng-repeat="key in keys">{{key}}</th>
+    </tr>
+    <tr ng-repeat="object in objects">
+        <td ng-repeat="key in keys">{{object[key]}}</td>
+    </tr>
+</table>

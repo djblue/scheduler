@@ -1,0 +1,15 @@
+<!--
+<div class="container" ng-controller="SubjectsController">
+    <table class="table">
+        <tr>
+            <th ng-repeat="key in keys">{{key}}</th>
+        </tr>
+        <tr ng-repeat="object in objects">
+            <td ng-repeat="value in object">{{value}}</td>
+        </tr>
+    </table>
+</div>
+-->
+<div class="container" ng-controller="SubjectsController">
+    <div objects="objects" keys="keys" table-view></div>
+</div>

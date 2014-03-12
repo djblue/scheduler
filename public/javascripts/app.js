@@ -1,35 +1,22 @@
 var app = angular.module('app', ['ngRoute', 'ngResource', 'app.directives'])
 .config(['$routeProvider', 
-    function ($routeProvider) {
-        $routeProvider.
-            when('/', {
-                templateUrl: 'partials/locations.html'
-            }).
-            when('/schedule/:id', {
-                templateUrl: 'partials/schedule.html'
-            }).
-            when('/users', {
-                templateUrl: 'partials/users.html'
-            }).
-            when('/staff', {
-                templateUrl: 'partials/staff.html'
-            }).
-            when('/staff/:id', {
-                templateUrl: 'partials/singleStaff.html'
-            }).
-            when('/search', {
-                templateUrl: 'partials/search.html'
-            }).
-            when('/help', {
-                templateUrl: 'partials/help.html'
-            }).
-            when('/log', {
-                templateUrl: 'partials/log.html'
-            }).
-            otherwise({ redirectTo: '/' });
-    }]);
+    function ($routeProvider) { $routeProvider
+        .when('/',              { templateUrl: 'partials/index.html' })
+        .when('/schedule/:id',  { templateUrl: 'partials/schedule.html' })
+        .when('/users',         { templateUrl: 'partials/users.html' })
+        .when('/staff',         { templateUrl: 'partials/staff.html' })
+        .when('/staff/:id',     { templateUrl: 'partials/singleStaff.html' })
+        .when('/help',          { templateUrl: 'partials/help.html' })
+        .when('/locations',     { templateUrl: 'partials/locations.html' })
+        .when('/subjects',      { templateUrl: 'partials/subjects.html' })
+        .when('/courses',       { templateUrl: 'partials/courses.html' })
+        .when('/log',           { templateUrl: 'partials/log.html' })
+        .otherwise(             { redirectTo: '/' });
+}]);
 
-app.controller('schedulerController', function ($routeParams, $scope, $http) {
+app.controller('schedulerController', [ '$routeParams', '$scope', '$http',
+
+function ($routeParams, $scope, $http) {
 
     $scope.days = [
         'monday',
@@ -91,7 +78,7 @@ app.controller('schedulerController', function ($routeParams, $scope, $http) {
             }
         }
     });
-});
+}]);
 
 // A little $resource helper class that extends the functionality of the
 // angular $resource object. It adds the ability of synchronizing client
@@ -177,6 +164,14 @@ function (Resource) {
     
 }]);
 
+app.service('Courses', ['Resource', 
+
+function (Resource) {
+
+    return new Resource('courses');
+    
+}]);
+
 // Staff service to manage staff member and keep data synced between
 // server and client.
 app.service('Staff', ['$resource', '$q',  'Resource', 'Locations',
@@ -258,133 +253,32 @@ app.controller('locationController', function ($scope, $http) {
     });
 });
 
-app.controller('searchController', function ($scope, $http) {
-    
-    $http.get('/api/subjects').success(function (data) {
-        $scope.subjects = data;
+// A controller to help manage locations.
+app.controller('LocationController', function ($scope, $http) {
+    $http.get('/api/locations').success(function (data) {
+        $scope.locations = data;
     });
-    
-    $http.get('/api/courses').success(function (data) {
-        $scope.coursesReq = data;
-        // console.log(data);
-    });
-
-    $http.get('/api/staff').success(function(data) {
-        $scope.staffReq = data;
-        $scope.staffByLoc = _.groupBy($scope.staff, function (item) { 
-            return item.location.title; 
-        });
-    });
-    
-    $scope.number;
-
-    $scope.$watchCollection('[prefix, number]', function(){
-       
-        // append everything to get it ready for html rendering.
-        $scope.table = {
-            monday:     [],
-            tuesday:    [],
-            wednesday:  [],
-            thursday:   [],
-            friday:     []
-        };
-
-        
-        for(day in $scope.table){
-            var j = 9;
-            $scope.times = [];
-            for (var i = 0; i <= 20; i++) {
-                var time;
-                // hit noon
-                if (j % 12 === 0) {
-                    time = "12"
-                } else {
-                    time = '' + j % 12;
-                }
-
-                // full hour
-                if (i % 2 === 0) {
-                    time += ':00'
-                // half hour
-                } else {
-                     time += ':30'
-                    j++;
-                }
-
-                if (i != 0) {
-                    // var temp = function (){
-                    //     if(i % 5 != 0) return "available";
-                    //     return "unavailable";
-                    // };
-
-                    $scope.times[i-1] += '-' + time;
-                    // populate table row
-                    $scope.table[day].push( { 
-                        "id": i-1,
-                        "time" : $scope.times[i-1], 
-                        "tutors" : []
-                        //"availability": temp()
-                    });
-                }
-                if (i != 20) {
-                    $scope.times[i] = time;
-                }
-            } 
-        }
-
-        if($scope.prefix != undefined){
-            $scope.courses = _.filter($scope.coursesReq, function (courses) { 
-                return courses.subject._id === $scope.prefix._id;
-            });
-
-            $scope.staff = [];
-
-            for (var i = 0; i < $scope.staffReq.length; i++){
-                // if user select just a subject
-                if($scope.number == undefined){
-                if(_.find($scope.staffReq[i].courses, function(course){return course.subject === $scope.prefix._id})){
-                    $scope.staff.push($scope.staffReq[i]);
-                    for(day in $scope.staffReq[i].availability){
-                    for(var obj = 0; obj < $scope.table[day].length;obj++){
-                        //$scope.table[day][obj]['tutors'] = [];
-                        if($scope.staffReq[i].availability[day][obj] === 1 ){
-                            $scope.table[day][obj]['availability'] = "available";
-                            $scope.table[day][obj]['tutors'].push($scope.staffReq[i].name);
-                        }else if ($scope.staffReq[i].availability[day][obj] === 0 &&
-                            $scope.table[day][obj]['availability'] === "available"){
-                            $scope.table[day][obj]['availability'] = "available";
-                        }else{
-                            $scope.table[day][obj]['availability'] = "unavailable";
-                        }
-                    }
-                }
-                }
-                }else{  // if user select a course number
-                if(_.find($scope.staffReq[i].courses, function(course){return (course.number === $scope.number.number && course.subject === $scope.prefix._id)})){
-                    $scope.staff.push($scope.staffReq[i]);
-                    for(day in $scope.staffReq[i].availability){
-                    for(var obj = 0; obj < $scope.table[day].length;obj++){
-                        //$scope.table[day][obj]['tutors'] = [];
-                        if($scope.staffReq[i].availability[day][obj] === 1 ){
-                            $scope.table[day][obj]['availability'] = "available";
-                            $scope.table[day][obj]['tutors'].push($scope.staffReq[i].name);
-                        }else if ($scope.staffReq[i].availability[day][obj] === 0 &&
-                            $scope.table[day][obj]['availability'] === "available"){
-                            $scope.table[day][obj]['availability'] = "available";
-                        }else{
-                            $scope.table[day][obj]['availability'] = "unavailable";
-                        }
-                    }
-                }
-                }   
-                }
-            }
-        }
-    });
-
-    $scope.$watch('prefix', function() {$scope.number = undefined});
-
 });
+
+app.controller('SubjectsController', ['$scope', 'Subjects',
+
+function ($scope, Subjects) {
+
+    Subjects.data.$promise.then (function (data) {
+        $scope.objects = Subjects.data;
+        $scope.keys = ['_id', 'title', 'prefix'];
+    });
+}]);
+
+app.controller('CoursesController', ['$scope', 'Courses',
+
+function ($scope, Courses) {
+
+    Courses.data.$promise.then (function (data) {
+        $scope.objects = Courses.data;
+        $scope.keys = ['_id', 'number', 'title'];
+    });
+}]);
 
 app.controller('logController', function ($scope, $http) {
 

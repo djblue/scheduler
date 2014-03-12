@@ -1,4 +1,6 @@
-<div class="container" ng-controller="LocationController">
+<div class="container" ng-controller="locationController">
+    <h1>Choose Location to schedule:</h1>
+    <hr>
     <ul>
         <li ng-repeat="location in locations">
             <a href="#/schedule/{{location._id}}">{{location.title}}</a> 

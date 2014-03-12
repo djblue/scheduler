@@ -1,5 +1,18 @@
 angular.module('app.directives', [])
 
+// Awesome directive to paginate a collection of objects.
+.directive('tableView', function () {
+    return {
+        restrict: 'AE',
+        templateUrl: '/partials/tableView.html',
+        scope: {
+            objects: '=',
+            keys: '='
+        },
+        link: function (scope, element, attrs) { }
+    }
+})
+
 .directive('toggle', function () {
     return {
         restrict: 'AE',
