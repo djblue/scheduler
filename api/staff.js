@@ -14,9 +14,9 @@ mongooseTypes.loadTypes(mongoose);
 var Staff = exports.Staff = mongoose.model('Staff', {
     editable: { type: Boolean, default: true },
     name: { type: String, required: true },
-    email: { type: mongoose.SchemaTypes.Email, required: true },
     major: { type: String, ref: 'Subject', required: true },
     location: { type: String, ref: 'Location', required: true },
+    email: { type: mongoose.SchemaTypes.Email },
     courses: [{ type: String, ref: 'Course' }],
     availability: {
         monday: [],

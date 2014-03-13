@@ -5,13 +5,24 @@ var mongoose  = require('mongoose')
  ,  Subject   = require('./subjects').Subject;
 
 // Setup the use model.
-var Course = exports.Course = mongoose.model('Course', {
+var courseSchema = new Schema({
     _id: String,
     subject: {type: String, ref: 'Subject'},
     number: { type:String },
     title: String,
     location: { type: String, ref: 'Location' }
 });
+
+courseSchema.pre('remove', function (next, done) {
+    this.model('Staff').update(
+        {courses: this._id},
+        {$pull: {courses: this._id}},
+        next
+    );
+    next();
+});
+
+var Course = exports.Course = mongoose.model('Course', courseSchema);
 
 var listByLocation = function (req, res) {
     Course.find({ location: req.params.location })

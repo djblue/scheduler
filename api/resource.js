@@ -57,15 +57,23 @@ exports.update = function (Model) {
 };
 
 // Remove a single model item by id.
+// Restructure to trigger post/pre remove event on Mongoose objects
+// https://github.com/LearnBoost/mongoose/issues/498  to read more about
+// why this was necessary.
 exports.remove = function (Model) {
     return function (req, res) {
-        Model.findByIdAndRemove(req.params.id, function (err, model) {
+        Model.findOne(req.params.id, function (err, model) {
             if (err) {
                 res.json(500, err);
             } else {
-                res.json(model);
+                model.remove(function (err, model) {
+                    if (err) {
+                        res.json(500, err);
+                    } else {
+                        res.json(model);
+                    }
+                });
             }
-
         }); 
     };
 };

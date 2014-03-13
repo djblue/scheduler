@@ -4,22 +4,20 @@ var mongoose  = require('mongoose')
  ,  Resource  = require('./resource');
 
 // Setup the use model.
-var Subject = exports.Subject = mongoose.model('Subject', {
+var subjectSchema = Schema({
     _id: String,
     title: String,
     prefix: String
 });
 
-var list = function (req, res) {
-    Subject.find()
-        .exec(function (err, staff) {
-            if (err) {
-                res.json(err);
-            } else {
-                res.json(staff);
-            }
-        });
-};
+subjectSchema.pre('remove', function (next) {
+    this.model('Course').find({ subject: this._id }, function (err, models) {
+        models.forEach(function (model) { model.remove(); });
+        next();
+    }); 
+});
+
+var Subject = exports.Subject = mongoose.model('Subject', subjectSchema);
 
 exports.setup = function (app) {
     app.get('/api/subjects',                              Resource.list(Subject));
