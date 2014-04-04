@@ -11,4 +11,4 @@ bower install
 
 # Import data to database
 cd data
-find . -type f | xargs -I{} basename {} | xargs -I{} ../import.sh {}
+find . -type f | xargs -I{} basename {} | xargs -I{} ../scripts/import.sh {}
