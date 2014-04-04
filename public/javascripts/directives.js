@@ -9,7 +9,9 @@ angular.module('app.directives', [])
         scope: {
             objects: '=',
             keys: '=',
+            add: '=',
             update: '=',
+            remove: '=',
             // initial sorting
             order: '@',
             reverse: '@'
@@ -21,6 +23,7 @@ angular.module('app.directives', [])
             scope.reverse = (scope.reverse == undefined)? false : scope.reverse;
 
             scope.fields = [];
+            scope.newObject = {};
 
             scope.$watch('keys', function () {
                 scope.keys = _.map(scope.keys, function (key) {

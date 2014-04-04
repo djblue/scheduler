@@ -285,7 +285,9 @@ function ($scope, Subjects) {
         ];
     });
 
-    $scope.update = function (subject, key) { Subjects.update(subject, key); };
+    $scope.add = function(object) {  Subjects.add(object); };
+    $scope.update = function (object, key) { Subjects.update(object, key); };
+    $scope.remove = function (object) {  Subjects.remove(object); };
 
 }]);
 
@@ -317,7 +319,9 @@ function ($scope, Subjects, Locations, Courses) {
         }
     ];
 
-    $scope.update = function (course, key) { Courses.update(course, key); };
+    $scope.add = function(object) {  console.log(object); Courses.add(object); };
+    $scope.update = function (object, keys) { Courses.update(object, keys); };
+    $scope.remove = function (object) {  Courses.remove(object); };
 }]);
 
 app.controller('logController', function ($scope, $http) {
