@@ -42,8 +42,8 @@
             </thead>
             <tbody>
                 <tr ng-repeat="member in staff | orderBy:name">
-                    <td><input type="checkbox" ng-checked="member.editable" 
-                         ng-click="member"></td>
+                    <td><input type="checkbox" ng-model="member.editable" 
+                         ng-click="update(member, 'editable')"></td>
                     <td><input ng-model="member.name"
                                ng-change="update(member, 'name')"
                                class="seemless" 
