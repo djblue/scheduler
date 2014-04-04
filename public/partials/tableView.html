@@ -14,6 +14,30 @@
         <td ng-repeat="key in keys">
             <div ng-switch on="key.editable">
                 <div ng-switch-when="true">
+                    <div ng-switch on="key.ref">
+                        <div ng-switch-when="undefined">
+                            <input ng-model="object[key.field]"
+                                   ng-change="update(object, key.field)"
+                                   class="seemless" 
+                                   style="width: 100%"
+                                   type="text"/>
+                        </div>
+                        <div ng-switch-default>
+                            <select ng-model="object[key.field]"
+                                    ng-options="i as c[key.ref.field] for (i,c) in key.ref.objects"
+                                    ng-change="update(object, key.field)">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-default>{{object[key.field]}}</div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td ng-repeat="key in keys">
+            <div ng-switch on="key.editable">
+                <div ng-switch-when="true">
                     <input ng-model="object[key.field]"
                            ng-change="update(object, key.field)"
                            class="seemless" 

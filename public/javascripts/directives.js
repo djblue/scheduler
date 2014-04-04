@@ -1,5 +1,6 @@
 angular.module('app.directives', [])
 
+
 // Awesome directive to paginate a collection of objects.
 .directive('tableView', function () {
     return {
@@ -26,7 +27,13 @@ angular.module('app.directives', [])
                     if (_.isObject(key)) {
                         return key;
                     } else {
-                        return { field: key.split('.')[0], editable: false };
+                        return { 
+                            field: key.split('.')[0],
+                            editable: false,
+                            related: {
+                                field: ''
+                            }
+                        };
                     }
                 });
             }, true);

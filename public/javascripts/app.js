@@ -289,20 +289,33 @@ function ($scope, Subjects) {
 
 }]);
 
-app.controller('CoursesController', ['$scope', 'Courses',
+app.controller('CoursesController', ['$scope', 'Subjects', 'Locations', 'Courses',
 
-function ($scope, Courses) {
+function ($scope, Subjects, Locations, Courses) {
 
-    Courses.data.$promise.then (function (data) {
-        $scope.objects = Courses.data;
-        $scope.keys = [
-            'subject.prefix',
-            'subject.title',
-            { field: 'number', editable: true },
-            { field: 'title', editable: true },
-            'location.title'
-        ];
-    });
+    $scope.objects = Courses.data;
+    $scope.keys = [
+        { 
+            field: 'subject',
+            editable: true,
+            ref:
+            {
+                objects:Subjects.data, 
+                field: 'prefix'
+            } 
+        },
+        { field: 'number', editable: true },
+        { field: 'title', editable: true },
+        { 
+            field: 'location',
+            editable: true,
+            ref:
+            {
+                objects: Locations.data, 
+                field: 'title'
+            } 
+        }
+    ];
 
     $scope.update = function (course, key) { Courses.update(course, key); };
 }]);
