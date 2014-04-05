@@ -32,8 +32,10 @@ exports.list = function (Model) {
 // Add a new model to the database.
 exports.add = function (Model) {
     return function (req, res) {
-        Model.create(req.body, function (err, model) {
+        var model = new Model(req.body);
+        model.save(function (err, model) {
             if (err) {
+                console.log(err);
                 res.json(500, err);
             } else {
                 res.json(201, model);
@@ -62,7 +64,7 @@ exports.update = function (Model) {
 // why this was necessary.
 exports.remove = function (Model) {
     return function (req, res) {
-        Model.findOne(req.params.id, function (err, model) {
+        Model.findById(req.params.id, function (err, model) {
             if (err) {
                 res.json(500, err);
             } else {

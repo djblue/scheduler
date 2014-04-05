@@ -1,12 +1,13 @@
 var mongoose  = require('mongoose')
  ,  Schema    = mongoose.Schema
+ , shortId    = require('shortid')
  ,  auth      = require('./auth')
  ,  Resource  = require('./resource')
  ,  Subject   = require('./subjects').Subject;
 
 // Setup the use model.
 var courseSchema = new Schema({
-    _id: String,
+    _id: { type: String, default: shortId.generate, index: true },
     subject: {type: String, ref: 'Subject'},
     number: { type:String },
     title: String,

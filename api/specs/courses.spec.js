@@ -4,14 +4,15 @@ var app     = require('../../app').app
   , User    = require('../users').User 
   , Course  = require('../courses').Course
   , Staff   = require('../staff').Staff
-  , Subject = require('../subjects').Subject;
+  , Subject = require('../subjects').Subject
+  , _       = require('underscore');
 
 
 var auth = new User({ username: 'root', password: 'password' });
 auth.save();
 
 describe('/api/courses', function () {
-
+    
     var subject, course, staff;
     beforeEach(function() { 
         // create default subject
@@ -56,10 +57,36 @@ describe('/api/courses', function () {
             .get('/api/subjects')
             .end(function (err, res) {
                 expect(res.status).toBe(200);
-                expect(res.body[0]._id).toBe(subject._id);
-                expect(res.body[0].title).toBe(subject.title);
-                expect(res.body[0].prefix).toBe(subject.prefix);
+                expect(res.body[0]).toEqual(subject._doc);
                 done();
+            });
+    });
+    it('should let you add a new course without an _id.', function (done) {
+        var course =  {
+            __v: 0,
+            subject: '123',
+            number: '123',
+            title: '123',
+            location: '123'
+        };
+        var id;
+        agent
+            .post('/api/courses')
+            .send(course)
+            .end(function (err, res) {
+                expect(res.status).toBe(201);
+                expect(res.body._id).not.toBe(undefined);
+                course._id = res.body._id;
+                expect(res.body).toEqual(course);
+                // quick sanity check to see that it can also be removed
+                agent
+                    .del('/api/courses/'+course._id)
+                    .end(function (err, res) {
+                        expect(res.status).toBe(200);
+                        expect(res.body._id).toBe(course._id);
+                        expect(res.body).toEqual(course);
+                        done(); 
+                    });
             });
     });
     it('should cleanup dependents on delete.', function (done) {
@@ -67,11 +94,7 @@ describe('/api/courses', function () {
             .del('/api/courses/'+course._id)
             .end(function (err, res) {
                 expect(res.status).toBe(200);
-                expect(res.body).not.toBe(null);
-                expect(res.body._id).toBe(course._id);
-                expect(res.body.number).toBe(course.number);
-                expect(res.body.title).toBe(course.title);
-                expect(res.body.location).toBe(course.location);
+                expect(res.body).toEqual(course._doc);
 
                 // should not be able to find document
                 Course.findById(course._id, function (err, course) {
