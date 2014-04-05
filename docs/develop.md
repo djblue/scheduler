@@ -36,7 +36,7 @@ following command:
 If you are developing on OSX, and you have [brew](http://brew.sh/)
 installed, run the following command (you can install git through Xcode):
 
-   brew install node mongodb
+    brew install node mongodb
 
 If you are developing on windows, the links in the Prerequisites section
 will lead to installers that you can simply run for your version of
