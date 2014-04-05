@@ -7,7 +7,7 @@ var mongoose  = require('mongoose')
 
 // Setup the use model.
 var courseSchema = new Schema({
-    _id: { type: String, default: shortId.generate, index: true },
+    _id: { type: String, default: shortId.generate },
     subject: {type: String, ref: 'Subject'},
     number: { type:String },
     title: String,

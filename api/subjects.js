@@ -1,11 +1,12 @@
 var mongoose  = require('mongoose')
  ,  Schema    = mongoose.Schema
+ , shortId    = require('shortid')
  ,  auth      = require('./auth')
  ,  Resource  = require('./resource');
 
 // Setup the use model.
 var subjectSchema = Schema({
-    _id: String,
+    _id: { type: String, default: shortId.generate },
     title: String,
     prefix: String
 });

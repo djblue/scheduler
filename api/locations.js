@@ -1,9 +1,10 @@
 var mongoose  = require('mongoose')
- ,  Schema    = mongoose.Schema;
+ ,  Schema    = mongoose.Schema
+ , shortId    = require('shortid');
 
 // Setup the use model.
 var Location = exports.Location = mongoose.model('Location', {
-    _id: String,
+    _id: { type: String, default: shortId.generate },
     title: String,
     hours: {
         monday: [Number],
