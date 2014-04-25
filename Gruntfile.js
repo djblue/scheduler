@@ -123,7 +123,7 @@ module.exports = function(grunt) {
         },
         shell: {
             mongo: {
-                command: 'mongod --dbpath /tmp/db --smallfiles',
+                command: 'mongod --dbpath ./db --smallfiles > /dev/null',
                 options: {
                     async: true
                 }
