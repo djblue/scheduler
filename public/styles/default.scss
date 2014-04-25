@@ -116,3 +116,20 @@ select {
 .capitalize {
     text-transform: capitalize;
 }
+/* font colors for specific issues */
+.error   { color: $red; }
+.success { color: $blue; }
+
+
+.gray { 
+    margin: 0;
+    padding: 0;
+    background: gray; }
+
+.container-floating {
+    background: white;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0px 1px 2px black;
+    width: 960px;
+}
