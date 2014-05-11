@@ -152,11 +152,13 @@ function ($http, $resource, $q) {
 
     // Remove an item.
     Resource.prototype.remove = function (item) {
-        var self = this;
-        var i = self.data.indexOf(item);
-        this.data[i].$delete(function () {
-            self.data.splice(i, 1);    
-        });
+        if (confirm('Are you sure?')) {
+            var self = this;
+            var i = self.data.indexOf(item);
+            this.data[i].$delete(function () {
+                self.data.splice(i, 1);    
+            });
+        }
     };
     
     return Resource;
@@ -267,11 +269,22 @@ app.controller('locationController', function ($scope, $http) {
 });
 
 // A controller to help manage locations.
-app.controller('LocationController', function ($scope, $http) {
-    $http.get('/api/locations').success(function (data) {
-        $scope.locations = data;
+app.controller('LocationController', [ '$scope', 'Locations',
+        
+function ($scope, Locations) {
+
+    Locations.data.$promise.then (function (data) {
+        $scope.objects = Locations.data;
+        $scope.keys = [
+            { field: 'title', editable: true }, 
+        ];
     });
-});
+
+    $scope.add = function(object) {  Locations.add(object); };
+    $scope.update = function (object, key) { Locations.update(object, key); };
+    $scope.remove = function (object) {  Locations.remove(object); };
+
+}]);
 
 app.controller('SubjectsController', ['$scope', 'Subjects',
 

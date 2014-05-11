@@ -1,7 +1,3 @@
 <div class="container" ng-controller="LocationController">
-    <ul>
-        <li ng-repeat="location in locations">
-            <a href="#/schedule/{{location._id}}">{{location.title}}</a> 
-        </li>
-    </ul>
+    <div objects="objects" remove="remove" add="add" update="update" keys="keys" table-view></div>
 </div>
