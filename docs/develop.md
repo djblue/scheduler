@@ -129,7 +129,7 @@ easier for you to make this application better:
     ├── docs                    Folder for project documentation
     ├── Gruntfile.js            Ugly grunt config file
     ├── node_modules            Folder where node puts its dependencies
-    ├── package.json            File for listing client sider dependencies
+    ├── package.json            File for listing serve side dependencies
     ├── public                  Statically served directory
     │   ├── bower_components    Folder where bower puts its dependencies
     │   ├── javascripts         Folder for Angular.js front-end application
