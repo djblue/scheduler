@@ -94,7 +94,7 @@
 
 </style>
 
-<div ng-controller="schedulerController" class="scheduler">
+<div ng-controller="SchedulerController" class="scheduler">
 
     <div>
         <button id="save" ng-click="saveAll()">save</button>
@@ -136,6 +136,12 @@
             <div class="current-hours-row"><h3>{{ .5*person.total }}</h3></div>
 
             <div class="body-row" ng-repeat="day in days"> 
+                <div style="position: absolute; margin-top: -40px; width:
+                    64px;">
+                    <h2>
+                        <a style="font-size: 12px;" href="/staff/{{person._id}}">{{ person.name }}</a>
+                    </h2>
+                </div>
                 <div mask="person.availability[day]" 
                      list="person.schedule[day]" 
                      inc1="total[day]"

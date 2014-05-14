@@ -14,7 +14,7 @@ var app = angular.module('app', ['ngRoute', 'ngResource', 'app.directives'])
         .otherwise(             { redirectTo: '/' });
 }]);
 
-app.controller('schedulerController', [ '$routeParams', '$scope', '$http',
+app.controller('SchedulerController', [ '$routeParams', '$scope', '$http',
 
 function ($routeParams, $scope, $http) {
 
