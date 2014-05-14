@@ -1,6 +1,8 @@
 var mongoose  = require('mongoose')
  ,  Schema    = mongoose.Schema
- , shortId    = require('shortid');
+ ,  shortId   = require('shortid')
+ ,  auth      = require('./auth')
+ ,  Resource  = require('./resource');
 
 // Setup the use model.
 var Location = exports.Location = mongoose.model('Location', {
@@ -15,17 +17,9 @@ var Location = exports.Location = mongoose.model('Location', {
     }
 });
 
-var list = function (req, res) {
-    Location.find()
-        .exec(function (err, staff) {
-            if (err) {
-                res.json(err);
-            } else {
-                res.json(staff);
-            }
-        });
-};
-
 exports.setup = function (app) {
-    app.get('/api/locations', list);
+    app.get('/api/locations',                              Resource.list(Location));
+    app.post('/api/locations',       auth.isAuthenticated, Resource.add(Location));
+    app.put('/api/locations/:id',    auth.isAuthenticated, Resource.update(Location));
+    app.delete('/api/locations/:id', auth.isAuthenticated, Resource.remove(Location));
 };
