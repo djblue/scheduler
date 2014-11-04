@@ -121,19 +121,6 @@ module.exports = function(grunt) {
                 src: ['build']
             }
         },
-        shell: {
-            mongo: {
-                command: 'mongod --dbpath ./db --smallfiles > /dev/null',
-                options: {
-                    async: true
-                }
-            },
-            options: {
-                stdout: true,
-                stderr: true,
-                failOnError: true
-            }
-        },
         karma: {
             unit: {
                 configFile: 'karma.conf.js'
@@ -156,8 +143,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     // Grunt task for running an Express Server
     grunt.loadNpmTasks('grunt-express-server');
-    // Grunt task for running mongod
-    grunt.loadNpmTasks('grunt-shell-spawn');
     // Grunt task for minimizing css 
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -173,8 +158,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
 
     // register all of the grunt tasks
-    grunt.registerTask('default', ['shell:mongo','express:prod']);
-    grunt.registerTask('server', ['shell:mongo', 'express:dev', 
+    grunt.registerTask('default', ['express:prod']);
+    grunt.registerTask('server', ['express:dev',
         'sass:dist', 'watch:reload', 'watch:express']);
     grunt.registerTask('test', ['shell:mongo', 'watch:jasmine']);
 };
