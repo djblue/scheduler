@@ -126,13 +126,13 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js'
             }
         },
-        sass: {
+        less: {
             dist: {
-              files: {
-                './public/styles/main.css': './public/styles/main.scss'
-              }
+                files: {
+                    'public/styles/main.css': 'public/styles/main.less'
+                }
+            }
         }
-  }
 
     });
 
@@ -151,7 +151,7 @@ module.exports = function(grunt) {
     // Grunt task to open things like a web browser
     grunt.loadNpmTasks('grunt-open');
     // Grunt task for the css preprocessing
-    grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-contrib-less');
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-jasmine-node');
@@ -160,6 +160,6 @@ module.exports = function(grunt) {
     // register all of the grunt tasks
     grunt.registerTask('default', ['express:prod']);
     grunt.registerTask('server', ['express:dev',
-        'sass:dist', 'watch:reload', 'watch:express']);
+        'less:dist', 'watch:reload', 'watch:express']);
     grunt.registerTask('test', ['shell:mongo', 'watch:jasmine']);
 };

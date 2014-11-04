@@ -1,5 +1,5 @@
 // configuration variables
-$padding: 20px;
+@padding: 20px;
 
 *, *:after, *:before {
     -webkit-box-sizing: border-box;
@@ -12,9 +12,9 @@ $padding: 20px;
 }
 
 .grid {
-    display: block;
-    margin-right: -$padding;
-    margin-bottom: -$padding;
+    display: blocky;
+    margin-right: -@padding;
+    margin-bottom: -@padding;
     clear: both;
 }
 
@@ -43,6 +43,6 @@ $padding: 20px;
 
 // creating the Gutters
 [class*='col-'] {
-    padding-right: $padding;
-    padding-bottom: $padding;
+    padding-right: @padding;
+    padding-bottom: @padding;
 }

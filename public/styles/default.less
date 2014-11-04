@@ -1,4 +1,4 @@
-$border: 3px;
+@border: 3px;
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +7,7 @@ $border: 3px;
 }
 b {
     font-weight: bold;
-    color: $blue;
+    color: @blue;
 }
 li {
     list-style: none;
@@ -39,14 +39,14 @@ h1, h2, h3, h4, h5, h6 {
     padding: .5em .6em;
     border: 1px solid #ccc;
     box-shadow: inset 0 1px 3px #ddd;
-    border-radius: $border;
+    border-radius: @border;
 }
 
 .seemless:hover {
-    border-bottom: 1px $green solid;
+    border-bottom: 1px @green solid;
 }
 .seemless:focus {
-    border-bottom: 1px $blue solid;
+    border-bottom: 1px @blue solid;
 }
 .seemless {
     background: none;
@@ -117,8 +117,8 @@ select {
     text-transform: capitalize;
 }
 /* font colors for specific issues */
-.error   { color: $red; }
-.success { color: $blue; }
+.error   { color: @red; }
+.success { color: @blue; }
 
 
 .gray { 
