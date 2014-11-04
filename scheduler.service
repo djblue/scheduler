@@ -1,0 +1,12 @@
+[Service]
+ExecStart=/usr/bin/node /vagrant/server.js
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=scheduler
+User=vagrant
+Group=users
+Environment=NODE_ENV=development
+
+[Install]
+WantedBy=multi-user.target
