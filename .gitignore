@@ -4,3 +4,4 @@ public/bower_components/
 .sass-cache/
 public/styles/main.css
 db
+.vagrant
